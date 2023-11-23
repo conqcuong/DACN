@@ -1,0 +1,209 @@
+@import './vars.scss';
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Light"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.ttf) format("truetype");
+    font-weight: 100;
+  }
+  
+  @font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Semilight"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.ttf) format("truetype");
+    font-weight: 200;
+  }
+  
+  @font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.ttf) format("truetype");
+    font-weight: 400;
+  }
+  
+  @font-face {
+    font-family: SegoeUI;
+    src:
+    local("Segoe UI Semibold"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff2) format("woff2"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff) format("woff"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.ttf) format("truetype");
+    font-weight: 600;
+    }
+    
+  @font-face {
+        font-family: SegoeUI;
+        src: 
+          local("Segoe UI Bold"),
+          url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff2) format("woff2"), 
+          url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff) format("woff"),
+          url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.ttf) format("truetype");
+      
+        font-weight: 700;
+        font-weight: 800;
+        font-weight: 900; 
+    }
+
+// Base
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: $--system-ui;
+  }
+  
+  // Elements
+  html {
+    scroll-behavior: smooth; 
+  }
+  
+  img {
+    width: 100%;
+    vertical-align: middle;
+  }
+  
+  // Components
+  ul {
+    li {
+      list-style-type: none;
+    }
+  }
+  
+  a {
+    background-color: transparent;
+    text-decoration: none;
+    color: $--white-color;
+  }
+
+  b,strong {
+    font-weight: bolder
+  }
+
+  code,kbd,samp {
+    font-family: monospace,monospace;
+    font-size: 1em
+  }
+
+  small {
+    font-size: 80%
+  }
+  
+  sub,sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+  }
+  
+  sub {
+    bottom: -.25em
+  }
+  
+  sup {
+    top: -.5em
+  }
+
+  img {
+    border-style: none
+  }
+  
+  button,input,optgroup,select,textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0
+  }
+  
+  button,input {
+    overflow: visible
+  }
+  
+  button,select {
+    text-transform: none
+  }
+  
+  a {
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none
+  }
+  
+  a:focus,a:hover,a:visited {
+    outline: none;
+    text-decoration: none
+  }
+  
+  a:focus, a:hover, a:visited {
+    outline-color: initial;
+    text-decoration-color: initial;
+  }
+  
+  b,h1,h2,h3,h4,h5,h6,strong {
+    font-weight: 600;
+  }
+  
+  button {
+    border: none;
+    box-shadow: none;
+    display: block;
+    outline: none;
+    padding: 0
+  }
+  
+  @media(min-width: 1024px) {
+    html ::-webkit-scrollbar {
+        border-radius:0;
+        height: 8px;
+        width: 8px
+    }
+  
+    html ::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0,.15);
+        border-radius: 4px
+    }
+  
+    html ::-webkit-scrollbar-track {
+        background-color: transparent;
+        border-radius: 0
+    }
+  }
+  
+  
+  // Typography
+  h1 {
+    font-size: 20px;
+    margin: .67em 0;
+  }
+  
+  // Utilities
+  hr {
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible
+  }
+  
+  pre {
+    font-family: monospace,monospace;
+    font-size: 10px;
+  }
+  
+  // etc
+  
+  // Media queries
+  @media (min-width: 1024px) {
+    html ::-webkit-scrollbar {
+      border-radius:0;
+      height: 8px;
+      width: 8px
+  
+  }
+}
+
