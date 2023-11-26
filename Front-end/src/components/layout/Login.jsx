@@ -26,10 +26,11 @@ export const Login = () => {
         }
     };
     const user = useSelector((state)=> state.auth.login.currentUser);
-    if (user) {
-        window.parent.postMessage('loginSuccess', '*');
-    }
-    
+        if (!user) {
+            console.log("Chưa đăng nhập")
+        }else{
+            window.parent.postMessage({ type: 'loginSuccess', data: user }, '*');
+        }
   return (
     <>
         <div className="h-screen overflow-hidden flex items-center justify-center">

@@ -61,6 +61,20 @@ const authSlice = createSlice({
         logoutFailed: (state) => {
             state.login.error = true;
         },
+        //Save
+        saveStart: (state) =>{
+            state.login.isFetching = true;
+        },
+        saveSuccess: (state, action) => {
+            state.login.isFetching = false;
+            const newCurrentUser = { ...state.login.currentUser, ...action.payload };
+            state.login.currentUser = newCurrentUser;
+            return state; // Trả về state mới để cập nhật lại currentUser sau khi cập nhật thông tin
+        },
+          
+        saveFailed: (state) => {
+            state.login.error = true;
+        },
     }
 });
 
@@ -74,6 +88,9 @@ export const {
     logoutStart,
     logoutFailed,
     logoutSuccess,
+    saveStart,
+    saveFailed,
+    saveSuccess,
 } = authSlice.actions;
 
 export default authSlice.reducer;

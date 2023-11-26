@@ -4,9 +4,8 @@ import { FaLightbulb } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { navlist } from "../../static/data";
-import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { logOutUser } from "../../redux/apiRequest";
+import { logOutUser, saveOutUser } from "../../redux/apiRequest";
 
 export const Header = () => {
     // Get User Login
@@ -118,12 +117,19 @@ export const Header = () => {
         }
     };
     // Đăng ký sự kiện lắng nghe từ iframe
-        window.addEventListener("message", (event) => {
-            if (event.data === "loginSuccess") {
-                // Reload trang
-                window.location.reload();
-            }
-        });
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'loginSuccess') {
+            const userData = event.data.data;
+            // Lưu userData vào store của cửa sổ cha ở đây
+            console.log('User data:', userData); // dispatch action để lưu dữ liệu vào store
+            let a = 0;
+            a= a+1
+            console.log(a)
+            saveOutUser(dispatch, userData);
+            setShowModal(false);
+        }
+    });
+    // console.log(user)
 
     const dispatch = useDispatch();
   // LogOut
@@ -132,7 +138,6 @@ export const Header = () => {
         logOutUser(dispatch);
         setShowModal(true);
         setIframeSrc("/login");
-        toast.success("LogOut successful.");
     };
 
   return (

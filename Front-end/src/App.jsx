@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { ToastContainer } from "react-toastify";
 import { Login } from "./components/layout/Login";
 import { HomePage } from "./pages/HomePage";
+import { Register } from "./components/layout/Register";
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
           <Routes>
             <Route path='/' element={<HomePage/>} />
             <Route path='/login' element={<Login/>} />
+            <Route path='/register' element={<Register/>} />
           </Routes>
         </Router>
         <ToastContainer className="toast-position"
