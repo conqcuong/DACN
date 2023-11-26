@@ -1,7 +1,8 @@
 import react from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { ToastContainer } from "react-toastify";
-import { Header } from "./components/layout/Header";
+import { Login } from "./components/layout/Login";
+import { HomePage } from "./pages/HomePage";
 
 function App() {
 
@@ -9,7 +10,8 @@ function App() {
     <>
       <Router>
           <Routes>
-            <Route path='/' element={<Header/>} />
+            <Route path='/' element={<HomePage/>} />
+            <Route path='/login' element={<Login/>} />
           </Routes>
         </Router>
         <ToastContainer className="toast-position"
