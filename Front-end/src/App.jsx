@@ -1,9 +1,13 @@
-import react from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { ToastContainer } from "react-toastify";
-import { Login } from "./components/layout/Login";
-import { HomePage } from "./pages/HomePage";
-import { Register } from "./components/layout/Register";
+import {
+    NotFound,
+    Login,
+    Register,
+    HomePage,
+    LibraryCoursePage,
+    CreateCoursePage
+} from "./Routes"
 
 function App() {
 
@@ -14,6 +18,9 @@ function App() {
             <Route path='/' element={<HomePage/>} />
             <Route path='/login' element={<Login/>} />
             <Route path='/register' element={<Register/>} />
+            <Route path='/library' element={<LibraryCoursePage/>} />
+            <Route path='/course/create' element={<CreateCoursePage/>} />
+            <Route path='*' element={<NotFound/>} />
           </Routes>
         </Router>
         <ToastContainer className="toast-position"

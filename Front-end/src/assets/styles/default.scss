@@ -207,3 +207,13 @@
   }
 }
 
+.img_form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #1475cf;
+  height: 500px;
+  width: 300px;
+  cursor: pointer;
+  border-radius: 5px;
+}

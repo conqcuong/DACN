@@ -1,0 +1,29 @@
+@import './vars.scss';
+@import './animation.scss';
+
+.not{
+    background-image: url(../imgs/notfounds/ccgradient.jpg);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: block;
+    height: 200px;
+    width: 100%;
+    margin-top: 25px;
+    margin-bottom: 19px;
+    mask-image: url(../imgs/notfounds/404.svg);
+    -webkit-mask-size: auto;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+}
+
+.Mobi{
+    animation: MenuMobi .5s ease;
+    -webkit-animation: MenuMobi .5s ease;
+  }
+  
+  .Mobi-body{
+    animation: MenuMobi .5s ease;
+    -webkit-animation: MenuMobi .5s ease;
+  }
+  

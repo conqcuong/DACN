@@ -3,6 +3,9 @@ import { createSlice  } from "@reduxjs/toolkit";
 const authSlice = createSlice({
     name: "auth",
     initialState:{
+        token: [],
+        loading: false,
+        error: false,
         login:{
             currentUser: null,
             isFetching: false,
@@ -15,6 +18,18 @@ const authSlice = createSlice({
         },
     },
     reducers:{
+        tokenStart: (state) =>{
+            state.loading = true;
+        },
+        tokenSuccess: (state, action) => {
+            state.loading = false;
+            state.token = action.payload;
+        },
+          
+        tokenFailed: (state) => {
+            state.error = true;
+            state.token = [];
+        },
         
         // Login
         loginStart: (state) =>{
@@ -56,6 +71,7 @@ const authSlice = createSlice({
         logoutSuccess: (state, action) => {
             state.login.isFetching = false;
             state.login.currentUser = null;
+            state.token = []; // Xóa token khi đăng xuất
         },
           
         logoutFailed: (state) => {
@@ -91,6 +107,9 @@ export const {
     saveStart,
     saveFailed,
     saveSuccess,
+    tokenStart,
+    tokenFailed,
+    tokenSuccess,
 } = authSlice.actions;
 
 export default authSlice.reducer;

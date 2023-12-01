@@ -16,8 +16,8 @@ export const Register = () => {
         e.preventDefault();
         const newUser = {
             email : email,
-            username : username,
-            password : password
+            password : password,
+            // username : username,
         };
         try {
             resgiterUser(newUser, dispatch, navigate, showToast);
@@ -28,6 +28,10 @@ export const Register = () => {
 
   return (
     <>
+        <div className='flex items-center p-5 sm:hidden fixed'>
+            <Link className='block' to='/'><img className='h-9.5 w-9.5 rounded-lg ' src={logo} alt="" /></Link>
+            <p className='font-black ml-3 text-14px'><Link to='/'>Học Lập Trình Để Đi Làm</Link></p>
+        </div>
         <div className="h-screen overflow-hidden flex items-center justify-center">
             <div className='min-w-[450px] bg-white py-10 px-10 rounded-[16px]'>
                 <h1 className='text-[28px] font-bold text-center'>Register</h1>

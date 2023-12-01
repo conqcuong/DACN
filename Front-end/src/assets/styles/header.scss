@@ -19,20 +19,20 @@
         flex: 1 1;
     }
 
-    .navbar__logo{
-        display: flex;
-        align-items: center;
+    // .navbar__logo{
+    //     display: flex;
+    //     align-items: center;
 
-        .flex{
-            img{
-                border-radius: 8px;
-                flex-shrink: 0;
-                height: 38px;
-                object-fit: contain;
-                width: 38px;
-            }
-        }
-    }
+    //     .flex{
+    //         img{
+    //             border-radius: 8px;
+    //             flex-shrink: 0;
+    //             height: 38px;
+    //             object-fit: contain;
+    //             width: 38px;
+    //         }
+    //     }
+    // }
 
     .navbar__body{
         .search__wrapper{
@@ -114,7 +114,7 @@
             padding: 8px;
         }
 
-        ul{
+        .navbar__ul{
             animation: module_fadeln .3s ease;
             background-color: $--white-color;
             border-radius: 10px;

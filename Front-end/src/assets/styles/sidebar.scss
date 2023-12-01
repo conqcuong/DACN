@@ -1,0 +1,10 @@
+/*Active sidebar*/
+.active{
+    background-color: #e8ebed;
+    color: #1a1a1a;
+  }
+  
+  .active:not(:active):hover {
+    background-color: #e8ebed;
+    color: #1a1a1a;
+  }
