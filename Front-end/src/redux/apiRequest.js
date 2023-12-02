@@ -1,13 +1,21 @@
 import axios from "axios";
-import { logoutStart,logoutFailed,logoutSuccess,loginFailed, loginStart, loginSuccess, resgiterStart,       resgiterSuccess, resgiterFailed, saveStart,saveFailed,saveSuccess,tokenStart,
-    tokenFailed,
-    tokenSuccess } from "./slice/authSlice";
+import { logoutStart,logoutFailed,logoutSuccess,loginFailed, loginStart, loginSuccess, resgiterStart, 
+        resgiterSuccess, resgiterFailed, saveStart,saveFailed,saveSuccess,tokenStart,
+        tokenFailed,tokenSuccess } from "./slice/authSlice";
+
 import {getAllCoursesStart, 
         getAllCoursesSuccess, 
         getAllCoursesFail,
         createCourseStart,
         createCourseSuccess,
         createCourseFail} from "./slice/courseSlice"
+
+import {getAllLessonsStart, 
+        getAllLessonsSuccess, 
+        getAllLessonsFail,
+        createLessonStart,
+        createLessonSuccess,
+        createLessonFail} from "./slice/lessonSlice"
 // authSlice
 
 export const loginUser = async(user, dispatch, showToast, navigate) =>{
@@ -103,5 +111,37 @@ export const createCourse = async (formData, dispatch, navigate, showToast) => {
     } catch (error) {
         dispatch(createCourseFail());
         showToast('Create error', 'error');
+    }
+}
+
+// LESSON
+export const getAllLessons = async (dispatch) => {
+    dispatch(getAllLessonsStart());
+    try {
+        const res = await axios.get("http://localhost:9000/Lession/getall");
+        dispatch(getAllLessonsSuccess(res.data));
+    } catch (err) {
+        dispatch(getAllLessonsFail());
+    }
+}
+
+export const createLesson = async (formData, dispatch, navigate, showToast) => {
+    dispatch(createLessonStart());
+    try {
+        const response = await fetch('http://localhost:9000/Lession/Create', {
+            method: 'POST',
+            body: formData,
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        dispatch(createLessonSuccess(data));
+        showToast('Create successful.', 'success');
+        navigate("/library");
+    } catch (error) {
+        dispatch(createLessonFail());
+        showToast('Create error', 'error');
+        console.log(error);
     }
 }

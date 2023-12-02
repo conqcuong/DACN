@@ -6,7 +6,10 @@ import {
     Register,
     HomePage,
     LibraryCoursePage,
-    CreateCoursePage
+    CreateCoursePage,
+    CourseDetailPage,
+    CreateLessonPage,
+    LeesonPage
 } from "./Routes"
 
 function App() {
@@ -20,6 +23,9 @@ function App() {
             <Route path='/register' element={<Register/>} />
             <Route path='/library' element={<LibraryCoursePage/>} />
             <Route path='/course/create' element={<CreateCoursePage/>} />
+            <Route path='/course/:id' element={<CourseDetailPage/>} />
+            <Route path='/course/lesson/create' element={<CreateLessonPage/>} />
+            <Route path='/course/lesson/:id' element={<LeesonPage/>} />
             <Route path='*' element={<NotFound/>} />
           </Routes>
         </Router>

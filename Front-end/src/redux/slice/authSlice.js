@@ -37,7 +37,11 @@ const authSlice = createSlice({
         },
         loginSuccess: (state, action) => {
             state.login.isFetching = false;
-            state.login.currentUser = action.payload;
+            const newCurrentUser = action.payload; // Thông tin người dùng mới
+            // Kiểm tra nếu currentUser đã tồn tại, thực hiện cập nhật nếu không trùng lặp
+            if (!state.login.currentUser || state.login.currentUser.id !== newCurrentUser.id) {
+              state.login.currentUser = newCurrentUser; // Cập nhật thông tin người dùng mới nếu không trùng lặp
+            }
         },
           
           loginFailed: (state) => {

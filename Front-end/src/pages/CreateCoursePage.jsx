@@ -120,8 +120,8 @@ export const CreateCoursePage = () => {
                                         kéo hoặc bỏ ảnh vào đây để tải lên
                                       </div>}
                                 </div>
-                                <div className='flex row mt-5'>
-                                    <section className='flex items-center gap-3'>
+                                <div className='flex mt-5'>
+                                    <section className='flex items-center p-2.5 bg-[#d5ebff] w-full gap-3 justify-between rounded-md'>
                                         <FaFile />
                                         <span>{fileName}</span>
                                         <RiDeleteBin7Fill className='hover:cursor-pointer' onClick={() => {

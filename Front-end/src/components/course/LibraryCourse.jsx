@@ -28,7 +28,8 @@ export const LibraryCourse = () => {
     const user = useSelector((state) => state.auth.login.currentUser);
     const courses = useSelector((state)=> state.course.listCourses);
     // Lọc các khóa học của người dùng hiện tại
-    const userCourses = courses.filter((course) => course.user === user.id);
+    const userCourses = courses.filter((course) => course.accountid === user.id);
+    // console.log(courses)
     // Delete
     const dispatch = useDispatch();
     const handleDel = (id) => {
@@ -49,16 +50,16 @@ export const LibraryCourse = () => {
                         <div className={` p-6 rounded-2xl border-2 border-[#e8e8e8] relative ${items.id !== userCourses[0].id ? 'mt-4' : ''}`} key={items.id}>
                             <div className='flex '>
                                 <div className='min-w-[228px] relative'>
-                                    <img className='w-[228px] rounded-2xl' src={items.cover} />
+                                    <img className='w-[228px] rounded-2xl' src={items.apiimage} />
                                 </div>
                                 <div className='flex-1 ml-6'>
                                     <div>
                                         <h2 className='text-[18px] font-bold flex items-center justify-between'>{items.name}
                                         <span className='hover:cursor-pointer' onClick={(e) => handleClick(e, items.id)}><FaEllipsis/></span>
                                         </h2>
-                                        <span className='text-primary-color text-16px font-semibold mt-1'>{items.price_sale}</span>
+                                        <span className='text-primary-color text-16px font-semibold mt-1'>{(items.price).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}đ</span>
                                     </div>
-                                    <p className='text-14px my-2 line-clamp-2'>{items.title}</p>
+                                    <p className='text-14px my-2 line-clamp-2'>{items.description}</p>
                                     <Link to={`/course/${items.id}`}><button className='text-white font-semibold text-whit bg-primary-color rounded-[99px] py-2 px-5'>Xem chi tiết</button></Link>
                                 </div>
                             </div>

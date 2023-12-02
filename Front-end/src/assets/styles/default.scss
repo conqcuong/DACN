@@ -217,3 +217,117 @@
   cursor: pointer;
   border-radius: 5px;
 }
+
+.upload-box > p{
+  text-align: center;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.icon{
+  width: 90px;
+  height: 90px;
+}
+
+.upload-box .form{
+  height: 200px;
+  width: 350px;
+  display: flex;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 5px;
+  border: 2px dashed #0086fe;
+}
+
+.form :where(svg, p){
+  color: #0086fe;
+}
+
+.form svg{
+  font-size: 50px;
+}
+
+.form p{
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+section .row{
+  margin-bottom: 10px;
+  background: #d5ebff;
+  list-style: none;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  width: 50%;
+  justify-content: space-between;
+}
+
+section .row svg:not(.check){
+  color: #0086fe;
+  font-size: 30px;
+}
+
+section .details span{
+  font-size: 12px;
+}
+
+.loading-area .row .content{
+  width: 100%;
+  margin-left: 15px;
+}
+
+.loading-area .details{
+  display: flex;
+  align-items: center;
+  margin-bottom: 7px;
+  justify-content: space-between;
+}
+
+.loading-area .content .loading-bar{
+  height: 6px;
+  width: 100%;
+  margin-left: 10px;
+  background: #fff;
+  border-radius: 30px;
+}
+
+.content .loading-bar .loading{
+  height: 100%;
+  width: 0%;
+  background: #0086fe;
+  border-radius: inherit;
+}
+
+.upload-area{
+  overflow-y: scroll;
+}
+
+.upload-area.onprogress{
+  max-height: 150px;
+}
+
+.upload-area::-webkit-scrollbar{
+  width: 0px;
+}
+
+.upload-area .row .content{
+  display: flex;
+  align-items: center;
+}
+
+.upload-area .row .details{
+  display: flex;
+  margin-left: 15px;
+  flex-direction: column;
+}
+
+.upload-area .row .details .size{
+  color: #404040;
+  font-size: 11px;
+}

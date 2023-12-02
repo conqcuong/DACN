@@ -15,8 +15,15 @@ const courseSlice = createSlice({
         },
         getAllCoursesSuccess: (state, action) => {
             state.loading = false;
-            state.listCourses = action.payload;
-        },
+            const newCourses = action.payload; // Giả sử payload là một mảng chứa các khóa học mới
+            // Kiểm tra dữ liệu trùng lặp trước khi cập nhật trạng thái
+            newCourses.forEach(newCourse => {
+              const isDuplicate = state.listCourses.some(course => course.id === newCourse.id); // Điều chỉnh logic so sánh của bạn ở đây
+              if (!isDuplicate) {
+                state.listCourses.push(newCourse); // Thêm khóa học mới vào danh sách nếu không trùng lặp
+              }
+            });
+          },
         getAllCoursesFail: (state) => {
             state.loading = false;
             state.error = true;

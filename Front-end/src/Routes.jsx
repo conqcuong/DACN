@@ -4,6 +4,9 @@ import { Register } from "./components/layout/Register";
 import { HomePage } from "./pages/HomePage";
 import { LibraryCoursePage } from "./pages/LibraryCoursePage";
 import { CreateCoursePage } from "./pages/CreateCoursePage";
+import { CourseDetailPage } from "./pages/CourseDetailPage";
+import { CreateLessonPage } from "./pages/CreateLessonPage";
+import { LeesonPage } from "./pages/LeesonPage";
 
 export {
     Login,
@@ -11,5 +14,8 @@ export {
     HomePage,
     NotFound,
     LibraryCoursePage,
-    CreateCoursePage
+    CreateCoursePage,
+    CourseDetailPage,
+    CreateLessonPage,
+    LeesonPage,
 }

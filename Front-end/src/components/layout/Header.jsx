@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
-import logo from "../../assets/imgs/f8-icon.png";
+import logo from "../../assets/imgs/Logo_9.jpg";
 import { FaLightbulb } from "react-icons/fa6";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux'
 import { navlist } from "../../static/data";
-import { logOutUser, saveOutUser, getAllCourses, profileUser } from "../../redux/apiRequest";
+import { logOutUser, saveOutUser, getAllCourses, profileUser, getAllLessons } from "../../redux/apiRequest";
 import { FaBell, FaBars, FaChevronLeft} from "react-icons/fa6";
 
 export const Header = () => {
@@ -19,10 +19,11 @@ export const Header = () => {
         const fetchData = async () => {
           try {
             await getAllCourses(dispatch);
+            await getAllLessons(dispatch);
             if (token !== null && typeof token === 'string' && token !== '') {
-              await profileUser(token, dispatch);
+                await profileUser(token, dispatch);
             } else {
-              console.log('Token is null or empty.'); // Xử lý khi token không có giá trị hoặc là chuỗi rỗng
+                console.log('Token is null or empty.'); // Xử lý khi token không có giá trị hoặc là chuỗi rỗng
             }
           } catch (err) {
             console.error(err);
