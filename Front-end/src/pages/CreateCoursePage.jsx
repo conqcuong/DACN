@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Sidebar } from '../components/layout/Sidebar'
 import { Header } from '../components/layout/Header'
 import { Footer } from '../components/layout/Footer'
@@ -10,24 +10,24 @@ import { FaFile } from "react-icons/fa6";
 import { RiDeleteBin7Fill } from "react-icons/ri";
 import { createCourse } from '../redux/apiRequest';
 import { toast } from 'react-toastify';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export const CreateCoursePage = () => {
     // Login User
     const user = useSelector((state)=> state.auth.login.currentUser);
 
-    const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [title, setTitle] = useState("");
     const [price, setPrice] = useState("");
-    const [catelory, setCatelory] = useState("");
-    const [cover, setCover] = useState(null);    
+    const [catelory, setCatelory] = useState(""); 
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    
     const handleCourse = (e) =>{
         try{
             e.preventDefault();
+            setIsLoading(true);
             const newCourse = {
                 "accountid" : user.id,
                 "name" : name,
@@ -45,6 +45,7 @@ export const CreateCoursePage = () => {
             toast.error("Tạo khóa học thất bại");
         }
     }
+    // xử lý hình ảnh: kéo thả ảnh hiện hình ảnh, xóa ảnh, hiện thông tin ảnh
     const [images, setImage] = useState(null);
     const [fileName, setFileName] = useState("Chưa tìm thấy ảnh");
     const [filePath, setFilePath] = useState(null);
@@ -60,7 +61,17 @@ export const CreateCoursePage = () => {
     const handleDragOver = (e) => {
         e.preventDefault();
     };
-    console.log(filePath)
+    // console.log(filePath)
+    // Xử lý khi load để tạo khóa học
+    const [isLoading, setIsLoading] = useState(false);
+    useEffect(() => {
+        // Khi isLoading thay đổi, thêm hoặc loại bỏ lớp overlay-scroll-lock
+        if (isLoading) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }, [isLoading]);
   return (
     <>
         <Header/>
@@ -138,6 +149,13 @@ export const CreateCoursePage = () => {
             </div>
         </div>
         <Footer/>
+        {isLoading && (
+            <div className='overlay'>
+                <div className='loader'>
+                    <CircularProgress /> {/* Hiển thị CircularProgress */}
+                </div>
+            </div>
+        )}
     </>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef} from 'react'
+import React, { useState, useRef, useEffect} from 'react'
 import { Sidebar } from '../components/layout/Sidebar'
 import { Header } from '../components/layout/Header'
 import { Footer } from '../components/layout/Footer'
@@ -8,6 +8,7 @@ import showToast from '../redux/showToast'
 import { toast } from 'react-toastify';
 import { FaFile, FaCheck } from "react-icons/fa6";
 import { createLesson } from '../redux/apiRequest';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export const CreateLessonPage = () => {
     const dispatch = useDispatch();
@@ -15,7 +16,6 @@ export const CreateLessonPage = () => {
     const [name, setName] = useState("");
     const [uploadFile, setUploadFile] = useState(null);
     const fileInputRef = useRef(null); // Sử dụng useRef thay vì useState
-    const [creatingCourse, setCreatingCourse] = useState(false);
     const handleFileInputClick = () => {
         fileInputRef.current.click();
     }
@@ -25,7 +25,7 @@ export const CreateLessonPage = () => {
         setUploadFile(selectedFile);
         console.log(selectedFile);
     }
-
+    // đổi Kb sang Mb
     const convertFileSize = (sizeInBytes) => {
         const sizeInMB = sizeInBytes / (1024 * 1024);
         const formattedSize = sizeInMB.toFixed(2);
@@ -37,6 +37,7 @@ export const CreateLessonPage = () => {
     const handLesson = (e) =>{
         try {
             e.preventDefault();
+            setIsLoading(true);
             // if (!course || !course._id) {
             //     toast.error("Course ID not found");
             //     return;
@@ -51,15 +52,23 @@ export const CreateLessonPage = () => {
             formData.append('data', JSON.stringify(NewLesson));
             formData.append('file', uploadFile);
             createLesson(formData, dispatch, navigate, showToast)
-            // Tiếp tục xử lý với NewLesson
         } catch (error) {
-            // toast.error("Create error");
-        console.log(error);
+            toast.error("Create error");
         }
     }
-    
+    // Xử lý khi load để tạo khóa học
+    const [isLoading, setIsLoading] = useState(false);
+    useEffect(() => {
+        // Khi isLoading thay đổi, thêm hoặc loại bỏ lớp overlay-scroll-lock
+        if (isLoading) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }, [isLoading]);
   return (
     <>
+    <div>
         <Header/>
         <div className='flex min-h-screen mt-5'>
             <div className='hidden shrink-0 lg:block'>
@@ -136,6 +145,14 @@ export const CreateLessonPage = () => {
             </div>
         </div>
         <Footer/>
+        {isLoading && (
+            <div className='overlay'>
+                <div className='loader'>
+                    <CircularProgress /> {/* Hiển thị CircularProgress */}
+                </div>
+            </div>
+        )}
+    </div>
     </>
   )
 }

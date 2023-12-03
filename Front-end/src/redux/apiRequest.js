@@ -23,7 +23,7 @@ export const loginUser = async(user, dispatch, showToast, navigate) =>{
     try{
         const res = await axios.post("http://localhost:9006/Account/authenticate", user)
         dispatch(tokenSuccess(res.data));
-        showToast('token successful.', 'success');
+        showToast('Login successful.', 'success');
         navigate("/")
     }catch(err){
         dispatch(tokenFailed());
@@ -35,17 +35,19 @@ export const profileUser = async (token, dispatch) => {
     dispatch(loginStart()); // Dispatch action bắt đầu đăng nhập
     try {
         const res = await axios.get('http://localhost:9000/Account/login', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            }
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          }
         });
         // Nếu request thành công, dispatch action với thông tin người dùng vào Redux
         dispatch(loginSuccess(res.data)); // Thay loginSuccess bằng action tương ứng trong ứng dụng của bạn
-    } catch (error) {
+      } catch (error) {
         // Xử lý lỗi nếu có
-        dispatch(loginSuccess(error)); // Thay loginFailure bằng action tương ứng trong ứng dụng của bạn
-    }
+        const errorMessage = error.response ? error.response.data.message : 'Something went wrong!';
+        // Gửi chỉ thông điệp lỗi cần thiết vào store thay vì object lỗi đầy đủ
+        dispatch(loginFailed(errorMessage)); // Thay loginFailure bằng action tương ứng trong ứng dụng của bạn
+      }
 };
 export const resgiterUser = async (user, dispatch, navigate, showToast) =>{
     dispatch(resgiterStart());

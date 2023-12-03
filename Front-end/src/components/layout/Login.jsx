@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 
 export const Login = () => {
     const token = useSelector(state => state.auth.token);
-    console.log(token)
+    // console.log(token)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
