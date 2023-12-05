@@ -32,26 +32,27 @@ export const CreateLessonPage = () => {
         return formattedSize;
     };
 
-    const course = useSelector((state)=> state.course.listCourses);
-
+    const course = useSelector((state)=> state.course.currentCourse);
+    const productId = course.length > 0 ? course[0].productid : null; // lấy id khóa học
+    console.log(productId);
     const handLesson = (e) =>{
-        try {
             e.preventDefault();
-            setIsLoading(true);
             // if (!course || !course._id) {
             //     toast.error("Course ID not found");
             //     return;
             // }
             const NewLesson = {
-                "productId": 15,
+                "productId": productId,
                 "title": name,
                 "description": "This isf a sample sds",
                 "deletesoft":1
             };
+        try {
             const formData = new FormData();
             formData.append('data', JSON.stringify(NewLesson));
             formData.append('file', uploadFile);
-            createLesson(formData, dispatch, navigate, showToast)
+            createLesson(formData, dispatch, navigate, showToast);
+            setIsLoading(true);
         } catch (error) {
             toast.error("Create error");
             setIsLoading(false);

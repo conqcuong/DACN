@@ -38,7 +38,18 @@ const courseSlice = createSlice({
         createCourseFail: (state) => {
             state.loading = false;
             state.error = true;
-        }
+        },
+        getOneStart: (state) => {
+            state.loading = true;
+        },
+        getOneSuccess: (state, action) => {
+            state.loading = false;
+            state.currentCourse = action.payload;
+        },
+        getOneFail: (state) => {
+            state.loading = false;
+            state.error = true;
+        },
     }
 })
 
@@ -48,7 +59,10 @@ export const {
     getAllCoursesFail,
     createCourseStart,
     createCourseSuccess,
-    createCourseFail
+    createCourseFail,
+    getOneStart,
+    getOneSuccess,
+    getOneFail
 } = courseSlice.actions;
 
 export default courseSlice.reducer;

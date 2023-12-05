@@ -4,27 +4,46 @@ import { Link,useNavigate } from 'react-router-dom';
 import { resgiterUser } from '../../redux/apiRequest';
 import { useDispatch } from 'react-redux';
 import showToast from '../../redux/showToast'
+import logo from '../../assets/imgs/Logo_9.jpg'
+import user_img from '../../assets/imgs/user/user_img.png'
 
 export const Register = () => {
     const [email, setEmail] = useState("");
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [filePath, setFilePath] = useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    
     const handleRegiter = async (e) =>{
         e.preventDefault();
         const newUser = {
-            email : email,
-            password : password,
-            // username : username,
+            "email" : email,
+            "password" : password,
+            "fullname" : username,
         };
+        const formData = new FormData();
+        formData.append('file', filePath);
+        formData.append('data', JSON.stringify(newUser));
         try {
-            resgiterUser(newUser, dispatch, navigate, showToast);
+            resgiterUser(formData, dispatch, navigate, showToast);
         } catch (error) {
-            toast.error('Login failed.');
+            toast.error('Register failed.');
         }
     }
+
+//   const [fileName, setFileName] = useState('');
+  const [image, setImage] = useState('');
+
+  const handleFileChange = ({ target: { files } }) => {
+    if (files[0]) {
+      setFilePath(files[0]);
+    //   setFileName(files[0].name);
+      setImage(URL.createObjectURL(files[0]));
+    }
+  };
+
+  console.log(filePath)
 
   return (
     <>
@@ -36,6 +55,17 @@ export const Register = () => {
             <div className='min-w-[450px] bg-white py-10 px-10 rounded-[16px]'>
                 <h1 className='text-[28px] font-bold text-center'>Register</h1>
                 <form className='flex flex-col' onSubmit={handleRegiter}>
+                <div className="rounded-full w-15 h-15 mt-3 flex items-center justify-center">
+                        <label className="relative w-14 h-14 overflow-hidden flex items-center justify-center bg-gray-300 cursor-pointer rounded-full hover:cursor-pointer">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                                onChange={handleFileChange}
+                            />
+                            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image || user_img})` }}></div>
+                        </label>
+                    </div>
                     <div className='flex justify-between'>
                         <label className='block text-14px font-semibold my-2.5 ml-2 text-black'>Gmail:</label>
                     </div>
@@ -43,7 +73,7 @@ export const Register = () => {
                         <input className='border-none flex-1 px-5 py-3 outline-none' type="gmail" placeholder="Enter your gmail" onChange={(e)=>setEmail(e.target.value)}/>
                     </div>
                     <div className='flex justify-between'>
-                        <label className='block text-14px font-semibold my-2.5 ml-2 text-black'>Tài khoản:</label>
+                        <label className='block text-14px font-semibold my-2.5 ml-2 text-black'>Họ tên:</label>
                     </div>
                     <div className='flex border border-solid border-gray-300 h-11 overflow-hidden rounded-[44px]'>
                         <input className='border-none flex-1 px-5 py-3 outline-none' type="text" placeholder="Enter your username" onChange={(e)=>setUserName(e.target.value)}/>

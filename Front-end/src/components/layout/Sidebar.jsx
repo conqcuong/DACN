@@ -44,7 +44,7 @@ export const Sidebar = () => {
             <ul className='my-2.5'>
                 <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to="/"><FaHouse className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Trang chủ</span></NavLink></li> 
                 <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to="/library"><FaRoad className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Lộ trình</span></NavLink></li>
-                <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to='/course/lesson/10'><FaRocketchat className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Chat</span></NavLink></li>
+                <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to='/course/15'><FaRocketchat className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Chat</span></NavLink></li>
             </ul>
         </div>
     </>

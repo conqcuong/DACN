@@ -29,7 +29,7 @@ function App() {
             <Route path='/course/lesson/create' element={<CreateLessonPage/>} />
             <Route path='/course/lesson/:id' element={<LeesonPage/>} />
             <Route path='/test' element={<VideoPlayer/>} />
-            <Route path='/test1/:id' element={<Test/>} />
+            <Route path='/test1' element={<Test/>} />
             <Route path='*' element={<NotFound/>} />
           </Routes>
         </Router>

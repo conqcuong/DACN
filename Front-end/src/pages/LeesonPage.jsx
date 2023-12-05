@@ -126,10 +126,10 @@ export const LeesonPage = () => {
     useEffect(() => {
         // Kiểm tra nếu số lần tua video vượt quá 3 lần
         if (seekCount > 3) {
-            alert('Cảnh báo: Bạn đã tua video quá 3 lần.');
+            alert('Cảnh báo: Bạn đã tua video quá 3 lần. Tua video sẽ không tăng thời gian');
             
             // Đặt lại giá trị của các state cần reset
-            setTimer(0);
+            // setTimer(0);
             setSeekCount(0);
             setIsActive(false);
         }

@@ -1,8 +1,11 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { getOneCourse } from '../../redux/apiRequest';
 
 export const CourseDetail = () => {
+    const dispatch = useDispatch();
     // id chi tiết khóa học
     const { id } = useParams();
     // ép kiểu về int
@@ -16,6 +19,17 @@ export const CourseDetail = () => {
     const lessonsForCourse = Lesson.filter(lesson => lesson.productId === courseId);
     // const lessonsForCourse = Lesson
     // console.log(lessonsForCourse)
+    // lấy dữ liệu 1 khóa học
+    useEffect(() => {
+        const fetchData = async() =>{
+            try{
+                await getOneCourse(dispatch, id);
+            }catch(err){
+                console.log(err);
+            }
+        }
+        fetchData();
+    }, []);
   return (
     <>
         <section className='mt-6 pr-11 pl-40 lg:mx-[-12px] md:mx-[-8px] md:flex-wrap sm:px-0 flex'>

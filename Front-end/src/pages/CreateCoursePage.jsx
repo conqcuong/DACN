@@ -45,6 +45,8 @@ export const CreateCoursePage = () => {
             toast.error("Tạo khóa học thất bại");
         }
     }
+
+    
     // xử lý hình ảnh: kéo thả ảnh hiện hình ảnh, xóa ảnh, hiện thông tin ảnh
     const [images, setImage] = useState(null);
     const [fileName, setFileName] = useState("Chưa tìm thấy ảnh");
@@ -57,6 +59,7 @@ export const CreateCoursePage = () => {
             setImage(URL.createObjectURL(file));
         }
     };
+    console.log(filePath)
     
     const handleDragOver = (e) => {
         e.preventDefault();

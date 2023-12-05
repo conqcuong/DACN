@@ -238,7 +238,7 @@ export const Header = () => {
                 </div>
                 {/* avatar User */}
                 <div className="hidden ml-4 lg:block" ref={imgRef} onClick={() => setOpen(!open)}>
-                    <img className="rounded-full h-[28.79px] w-[28.79px] hover:cursor-pointer" src={user.avatar}/>
+                    <img className="rounded-full h-[28.79px] w-[28.79px] hover:cursor-pointer" src={user.avaterimage}/>
                 </div>
                 {
                     // Menu Profile User
@@ -248,11 +248,11 @@ export const Header = () => {
                             <div className="flex">
                                 <div className="my-2.5 relative">
                                     <div>
-                                        <img className="rounded-full h-[50.4px] w-[50.4px]" src={user.avatar}/>
+                                        <img className="rounded-full h-[50.4px] w-[50.4px]" src={user.avaterimage}/>
                                     </div>
                                 </div>
                                 <div className="ml-3 self-center">
-                                    <span className="font-semibold text-[#292929] text-16px">{user.username}</span>
+                                    <span className="font-semibold text-[#292929] text-16px">{user.fullname}</span>
                                     <div className="text-text-color-light">{user.email}</div>
                                 </div>
                             </div>

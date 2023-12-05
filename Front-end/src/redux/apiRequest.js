@@ -8,7 +8,10 @@ import {getAllCoursesStart,
         getAllCoursesFail,
         createCourseStart,
         createCourseSuccess,
-        createCourseFail} from "./slice/courseSlice"
+        createCourseFail,
+        getOneStart,
+        getOneSuccess,
+        getOneFail} from "./slice/courseSlice"
 
 import {getAllLessonsStart, 
         getAllLessonsSuccess, 
@@ -49,14 +52,20 @@ export const profileUser = async (token, dispatch) => {
         dispatch(loginFailed(errorMessage)); // Thay loginFailure bằng action tương ứng trong ứng dụng của bạn
       }
 };
-export const resgiterUser = async (user, dispatch, navigate, showToast) =>{
+export const resgiterUser = async (formData, dispatch, navigate, showToast) =>{
     dispatch(resgiterStart());
     try{
-        await axios.post("http://localhost:9000/Account/Create", user);
-        dispatch(resgiterSuccess());
+        const response = await fetch('http://localhost:9000/Account/Create', {
+            method: 'POST',
+            body: formData,
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        dispatch(resgiterSuccess(data));
         navigate("/login");
         showToast('Resgiter successful.', 'success');
-        window.location.reload();
     }catch(err){
         dispatch(resgiterFailed());
         showToast('Duplicate gmail account!', 'error');
@@ -115,6 +124,17 @@ export const createCourse = async (formData, dispatch, navigate, showToast) => {
         showToast('Create error', 'error');
     }
 }
+
+export const getOneCourse = async (dispatch, id) => {
+    dispatch(getOneStart());
+    try {
+      const response = await axios.get(`http://localhost:9000/ProductAccount/demo/${id}`);
+      const course = response.data;
+      dispatch(getOneSuccess(course));
+    } catch (err) {
+      dispatch(getOneFail());
+    }
+};
 
 // LESSON
 export const getAllLessons = async (dispatch) => {
