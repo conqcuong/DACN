@@ -28,17 +28,24 @@ export const CourseDetail = () => {
                 </div>
                 <div className='order-2'>
                     <h2 className='text-[20px] font-bold my-4'>Nội dung khóa học</h2>
-                    <Link to='/course/lesson/create'><button className='text-white font-semibold text-whit bg-primary-color rounded-[99px] py-2 px-5'>Tạo bài học</button></Link>
+                    <Link to='/course/lesson/create'><button className='text-white font-semibold text-whit bg-primary-color rounded-[99px] py-2 px-5 inline-block'>Tạo bài học</button></Link>
                     <div className='mt-3 mb-12'>
-                        {  lessonsForCourse && lessonsForCourse.map((items, sum) => (
-                            <div key={items.id} className='mt-2 cursor-pointer bg-[#f5f5f5] border border-[#ebebeb] p-0 border-solid flex justify-between'>
-                               <Link to={`/course/lesson/${items.id}`} className='w-[83%]'>
+                        {lessonsForCourse &&
+                            lessonsForCourse.map((items, index) => (
+                            <div key={items.id} className={`mt-2 cursor-pointer border border-[#ebebeb] p-0 border-solid flex justify-between ${
+                                index === 0 ? '' : 'pointer-events-none opacity-50' // Phần tử đầu không bị làm mờ
+                                }`} onClick={() => {
+                                    if (index === 0) {
+                                    // Xử lý khi click vào phần tử đầu tiên
+                                    console.log('Clicked on the first element.');
+                                }}}>
+                                <Link to={`/course/lesson/${items.id}`} className='w-[83%]'>
                                     <h5 className='text-inherit text-16px font-semibold'>
                                         <div className='text-text-color text-16px overflow-hidden py-3.5 pr-7.5 pl-12'>
-                                            <span><p className='font-bold'>{sum+1}. {items.title}</p></span>                                      
+                                            <span><p className='font-bold'>{index + 1}. {items.title}</p></span>
                                         </div>
                                     </h5>
-                               </Link>
+                                </Link>
                                 <div className='flex gap-6 mr-5 self-center text-11px font-semibold'>
                                     <span className='px-2 py-1 bg-primary-color text-white' onClick={() => handleDel(items.id)}>Xóa</span>
                                     <Link to={`/lesson/edit/${items.id}`} className='px-2 py-1 bg-primary-color text-white'>Chỉnh sửa</Link>

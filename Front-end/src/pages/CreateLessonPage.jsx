@@ -43,7 +43,7 @@ export const CreateLessonPage = () => {
             //     return;
             // }
             const NewLesson = {
-                "productId": 9,
+                "productId": 15,
                 "title": name,
                 "description": "This isf a sample sds",
                 "deletesoft":1
@@ -54,6 +54,7 @@ export const CreateLessonPage = () => {
             createLesson(formData, dispatch, navigate, showToast)
         } catch (error) {
             toast.error("Create error");
+            setIsLoading(false);
         }
     }
     // Xử lý khi load để tạo khóa học

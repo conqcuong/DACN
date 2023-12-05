@@ -60,7 +60,7 @@ export const LibraryCourse = () => {
                                         <span className='text-primary-color text-16px font-semibold mt-1'>{(items.price).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}đ</span>
                                     </div>
                                     <p className='text-14px my-2 line-clamp-2'>{items.description}</p>
-                                    <Link to={`/course/${items.id}`}><button className='text-white font-semibold text-whit bg-primary-color rounded-[99px] py-2 px-5'>Xem chi tiết</button></Link>
+                                    <Link to={`/course/${items.id}`}><button className='text-white font-semibold text-whit bg-primary-color rounded-[99px] py-2 px-5 inline-block'>Xem chi tiết</button></Link>
                                 </div>
                             </div>
                             {

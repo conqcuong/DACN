@@ -7,11 +7,10 @@ import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
 
 export const LeesonPage = () => {
-    // id chi tiết khóa học
     const { id } = useParams();
+    const navigateTo = useNavigate();
     // ép kiểu về int
     const lessonId = parseInt(id);
-    // Lấy các dữ liệu từ store
     const course = useSelector((state)=> state.course.listCourses); 
     const lesson = useSelector((state)=> state.lesson.listLessons);
     // lấy bài học có cùng id
@@ -19,7 +18,14 @@ export const LeesonPage = () => {
     const getcourseFind = course.find(g => g.id ===  getLesson.productId)
     // Lấy danh sách bài học
     const lessonsForCourse = lesson.filter(lesson => lesson.productId === getcourseFind.id); 
-    // console.log(lessonsForCourse)
+    // Kiểm xoát xem video
+    const videoRef = useRef(null);
+    const [timer, setTimer] = useState(0); //  Thời gian đã xem
+    const [totalTime, setTotalTime] = useState(0); // Tổng thời gian xem
+    const [thirtyPercentTime, setThirtyPercentTime] = useState(0); // 30% Tổng video
+    const [isActive, setIsActive] = useState(false);
+    const [seekCount, setSeekCount] = useState(0); // Số lần tua video
+    const [allowNext, setAllowNext] = useState(false); //Điều kiện hiện nút cho người dùng ấn
     /**/
     const [isSplit, setIsSplit] = useState(false);
     const toggleSplit = () => {
@@ -61,33 +67,106 @@ export const LeesonPage = () => {
     const updatedAtString = getLesson.date; // Chuỗi ngày từ getLesson
     const updatedAtDate = new Date(updatedAtString); // Chuyển đổi thành đối tượng Date
     const formattedUpdatedAt = format(updatedAtDate, "MMMM 'năm' yyyy"); // Định dạng ngày
-    // console.log(formattedUpdatedAt)
+    console.log(formattedUpdatedAt)
     //
+
+    // Xem video
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (isActive) {
+                setTimer((prevTimer) => prevTimer + 1);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [isActive]);
+
+    const handleVideoPlay = () => {
+        setIsActive(true);
+    };
+
+    const handleVideoPause = () => {
+        setIsActive(false);
+    };
+
+    const handleVideoSeeked = () => {
+        const video = videoRef.current;
+        if (video.currentTime === 0) {
+            setTimer(0);
+        }
+
+        // Tăng số lần tua video
+        setSeekCount((prevCount) => prevCount + 1);
+
+        // Kiểm tra nếu tua video quá 50%
+        // const percentSeeked = (video.currentTime / video.duration) * 100;
+        // if (percentSeeked > 50) {
+        //     alert('Cảnh báo: Bạn đã tua quá 50% của video.');
+        // }
+    };
+    const handleLoadedMetadata = () => {
+        const video = videoRef.current;
+        if (video) {
+            const duration = video.duration;
+            setTotalTime(duration);
+            const thirtyPercent = duration * 0.1; // Tính toán 30% của thời gian tổng
+            setThirtyPercentTime(thirtyPercent); // Lưu giá trị 30% vào state
+        }
+    };
+
+    useEffect(() => {
+        if (timer >= thirtyPercentTime) {
+            setAllowNext(true); // Cho phép chuyển đến video tiếp theo
+        } else {
+            setAllowNext(false); // Không cho phép chuyển đến video tiếp theo
+        }
+    }, [timer, thirtyPercentTime]);
+
+
+    useEffect(() => {
+        // Kiểm tra nếu số lần tua video vượt quá 3 lần
+        if (seekCount > 3) {
+            alert('Cảnh báo: Bạn đã tua video quá 3 lần.');
+            
+            // Đặt lại giá trị của các state cần reset
+            setTimer(0);
+            setSeekCount(0);
+            setIsActive(false);
+        }
+    }, [seekCount]);
+
     //Next 
-    const navigateTo = useNavigate();
     // Tìm chỉ số của video hiện tại trong mảng lesson
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
     useEffect(() => {
         // Tìm chỉ số của video hiện tại trong mảng lesson dựa trên id từ useParams
-        const index = lesson.findIndex(video => video.id === id);
+        const index = lessonsForCourse.findIndex(video => video.id === id);
         if (index !== -1) {
             setCurrentVideoIndex(index);
         }
     }, [id, lesson]);
+    // console.log(timer)
+    // console.log(thirtyPercentTime)
     const handleNextVideo = (e) => {
-        const nextVideo = lesson[currentVideoIndex + 1];
-        const nextVideoId = nextVideo ? nextVideo.id : null;
-        // console.log(nextVideoId);
-        // Kiểm tra xem nextVideoId có tồn tại không
-        if (nextVideoId) {
-            e.preventDefault();
-            // Tăng chỉ số của video hiện tại lên 1 để chuyển đến video tiếp theo
-            setCurrentVideoIndex(currentVideoIndex + 1);
-            // Điều hướng đến URL của video tiếp theo mà không làm tải lại trang
-            navigateTo(`/course/lesson/${nextVideoId}`);
-        } else {
-            // Xử lý khi không tìm thấy video tiếp theo
-            console.log('Không có video tiếp theo');
+            // Kiểm tra nếu thời gian hiện tại lớn hơn hoặc bằng 30% thời lượng video
+            const nextVideo = lessonsForCourse[currentVideoIndex + 1];
+            const nextVideoId = nextVideo ? nextVideo.id : null;
+            // Kiểm tra xem nextVideoId có tồn tại không
+        if (timer >= thirtyPercentTime) {
+            if (nextVideoId) {
+                e.preventDefault();
+                // Tăng chỉ số của video hiện tại lên 1 để chuyển đến video tiếp theo
+                setCurrentVideoIndex(currentVideoIndex + 1);
+                // Điều hướng đến URL của video tiếp theo mà không làm tải lại trang
+                navigateTo(`/course/lesson/${nextVideoId}`);
+                // Reset lại giá trị
+                setTimer(0);
+                setSeekCount(0);
+                setIsActive(false);
+            } else {
+                // Xử lý khi không tìm thấy video tiếp theo
+                console.log('Không có video tiếp theo');
+            }
         }
     };
 
@@ -100,17 +179,20 @@ export const LeesonPage = () => {
             console.log('Đã ở video đầu tiên');
             return;
         }
-    
         // Giảm chỉ số của video hiện tại đi 1 để chuyển đến video trước đó
         setCurrentVideoIndex(currentVideoIndex - 1);
-    
         // Lấy id của video trước đó và điều hướng đến URL của nó
-        const prevVideoId = lesson[currentVideoIndex - 1].id;
+        const prevVideoId = lessonsForCourse[currentVideoIndex - 1].id;
         navigateTo(`/course/lesson/${prevVideoId}`);
+        // Reset lại giá trị
+        setTimer(0);
+        setSeekCount(0);
+        setIsActive(false);
     };
-    console.log(getLesson)
-  return (
-    <>
+    // console.log(getLesson)
+    // console.log(currentVideoIndex);
+    // lessonsForCourse
+    return (
         <section className='w-full mx-auto'>
             <div className='flex items-center bg-[#29303b] relative z-1 h-[50px]'>
                 <div className='flex cursor-pointer h-[50px] w-[60px] transition-background-color duration-200 ease-linear'><Link to='/'><FaChevronLeft className='mx-[25px] my-[17px] text-white'/></Link></div>
@@ -140,7 +222,18 @@ export const LeesonPage = () => {
                     <div className='pt-[56.25%] relative'>
                         <div className='w-full h-full absolute inset-0 overflow-hidden'>
                             {/* Sử dụng key={getLesson.id} để tránh load trang 2 lần  */}
-                            <iframe key={getLesson.id} className="w-full h-full aspect-video pointer-events-auto" src={getLesson.videoapi}></iframe>
+                            <video
+                                key={getLesson.id}
+                                ref={videoRef}
+                                className="w-full h-full aspect-video pointer-events-auto"
+                                controls
+                                onPlay={handleVideoPlay}
+                                onPause={handleVideoPause}
+                                onSeeked={handleVideoSeeked}
+                                onLoadedMetadata={handleLoadedMetadata} // Sự kiện này để lấy thời gian tổng của video
+                            >
+                                    <source src={getLesson.videoapi} type="video/mp4" />
+                            </video>
                         </div>
                     </div>
                 </div>
@@ -154,10 +247,17 @@ export const LeesonPage = () => {
                     <FaChevronLeft/>
                     <span className='rounded-md text-[#404040] font-semibold px-3 py-2'>BÀI TRƯỚC</span>
                 </button>
-                <button  className={`flex rounded-md text-[#404040] text-14px font-semibold px-3 py-2 duration-300 ease-in-out items-center ml-3 md:mr-4 md:p-2.5 ${currentVideoIndex === lesson.length - 1 ? 'cursor-not-allowed opacity-50' : ''}`} onClick={currentVideoIndex !== lesson.length - 1 ? handleNextVideo : undefined}>
+                {allowNext ? (
+                    <button  className={`flex rounded-md text-[#404040] text-14px font-semibold px-3 py-2 duration-300 ease-in-out items-center ml-3 md:mr-4 md:p-2.5 ${currentVideoIndex === lessonsForCourse.length - 1 ? 'cursor-not-allowed opacity-50' : ''}`} onClick={currentVideoIndex !== lessonsForCourse.length - 1 ? handleNextVideo : undefined}>
+                        <span className='rounded-md text-[#404040] font-semibold px-3 py-2' >BÀI TIẾP THEO</span>
+                        <FaChevronRight/>
+                </button>
+                ) : (
+                    <button  className={`flex rounded-md text-[#404040] text-14px font-semibold px-3 py-2 duration-300 ease-in-out items-center ml-3 md:mr-4 md:p-2.5 cursor-not-allowed opacity-50`}>
                     <span className='rounded-md text-[#404040] font-semibold px-3 py-2' >BÀI TIẾP THEO</span>
                     <FaChevronRight/>
                 </button>
+                )}
                 <div className='flex bottom-0 cursor-pointer lg:justify-end absolute right-0 top-0 lg:w-[30%] items-center justify-start md:left-0 md:w-[26%] sm:left-0'>
                     <button onClick={toggleSplit} className='flex bg-white rounded-full shrink-0 justify-center text-16px h-[38px] w-[38px] mx-5 items-center'>              
                         {isSplit ? <FaArrowRight/> : <FaBars/>}
@@ -185,6 +285,5 @@ export const LeesonPage = () => {
                 </div>
             )}
         </section>
-    </>
-  )
+    );
 }
