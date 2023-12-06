@@ -19,6 +19,12 @@ import {getAllLessonsStart,
         createLessonStart,
         createLessonSuccess,
         createLessonFail} from "./slice/lessonSlice"
+import {getAllUsersStart, 
+        getAllUsersSuccess, 
+        getAllUsersFail} from "./slice/userSlice"
+import {getAllCmtsStart, 
+        getAllCmtsSuccess, 
+        getAllCmtsFail} from "./slice/commentSlice"
 // authSlice
 
 export const loginUser = async(user, dispatch, showToast, navigate) =>{
@@ -93,6 +99,18 @@ export const saveOutUser = async(dispatch, user) =>{
     }
 };
 
+//  USER
+
+export const getAllUsers = async (dispatch) => {
+    dispatch(getAllUsersStart());
+    try {
+        const res = await axios.get("http://localhost:9006/Account/GetAll");
+        dispatch(getAllUsersSuccess(res.data));
+    } catch (err) {
+        dispatch(getAllUsersFail());
+    }
+}
+
 // COURSE
 
 export const getAllCourses = async (dispatch) => {
@@ -165,5 +183,17 @@ export const createLesson = async (formData, dispatch, navigate, showToast) => {
         dispatch(createLessonFail());
         showToast('Create error', 'error');
         console.log(error);
+    }
+}
+
+// COMMENT
+
+export const getAllCmts = async (dispatch) => {
+    dispatch(getAllCmtsStart());
+    try {
+        const res = await axios.get("http://localhost:8888/getall");
+        dispatch(getAllCmtsSuccess(res.data));
+    } catch (err) {
+        dispatch(getAllCmtsFail());
     }
 }

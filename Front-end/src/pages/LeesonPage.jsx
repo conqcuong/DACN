@@ -3,7 +3,7 @@ import logo from "../assets/imgs/Logo_9.jpg";
 import { FaChevronLeft, FaChevronRight, FaBars, FaArrowRight, FaComments, FaXmark } from 'react-icons/fa6'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
-// import { Comment } from "../components/layout/Comment";
+import { Comment } from "../components/layout/Comment";
 import { format } from 'date-fns';
 
 export const LeesonPage = () => {

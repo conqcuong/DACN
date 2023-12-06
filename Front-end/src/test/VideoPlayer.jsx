@@ -1,92 +1,171 @@
-import React, { useRef, useState, useEffect } from 'react';
+// import "../../static/init";
+// import React, { useState, useEffect } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import showToast from "../../redux/showToast";
+// import { useParams } from "react-router-dom";
+// import { getAllUsers, getAllCmts } from "../../redux/apiRequest";
+// import Stomp from "stompjs";
+// import SockJS from "sockjs-client";
 
-export const VideoPlayer = () => {
-    const [timer, setTimer] = useState(0);
-    const [totalTime, setTotalTime] = useState(0);
-    const [thirtyPercentTime, setThirtyPercentTime] = useState(0);
-    const [isActive, setIsActive] = useState(false);
-    const [seekCount, setSeekCount] = useState(0);
-    const videoRef = useRef(null);
+// export const Comment = () => {
+//   const [notifications, setNotifications] = useState([]);
+//   const [stompClient, setStompClient] = useState(null);
+//   const [comments, setComments] = useState([]);
+//   const [newComment, setNewComment] = useState("");
+//   const { id } = useParams();
+//   const lessonId = parseInt(id);
+//   const [test1, settest1] = useState([]);
+//   /**/
+//   const dispatch = useDispatch();
+//   const cmts = useSelector((state) => state.comment.listComments);
+//   const filteredLessonIds = cmts.filter((item) => item.lessionid === lessonId);
+//   const users = useSelector((state) => state.user.listUsers);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (isActive) {
-                setTimer((prevTimer) => prevTimer + 1);
-            }
-        }, 1000);
+//   useEffect(() => {
+//     //
+//     const fetchData = async () => {
+//       try {
+//         // await getAllUsers(dispatch)
+//         const response = await fetch("http://localhost:8888/getall/10"); //lessionId
+//         const data = await response.json();
+//         setComments(data);
+//       } catch (err) {
+//         console.log(err);
+//       }
+//     };
 
-        return () => clearInterval(interval);
-    }, [isActive]);
+//     const socket = new SockJS("http://localhost:8888/ws");
+//     const stomp = Stomp.over(socket);
+//     setStompClient(stomp);
+//     stomp.connect({}, () => {
+//       stomp.subscribe(`/app/sendNotification/loc/` + id, (notification) => {
+//         const newNotification = JSON.parse(notification.body);
 
-    const handleVideoPlay = () => {
-        setIsActive(true);
-    };
+//         // Kiểm tra xem newNotification đã tồn tại trong state hay chưa
+//         if (
+//           !notifications.some(
+//             (existingNotification) =>
+//               existingNotification.id === newNotification.id
+//           )
+//         ) {
+//           setNotifications((prevNotifications) => [
+//             ...prevNotifications,
+//             newNotification,
+//           ]);
+//         }
+//       });
+//     });
 
-    const handleVideoPause = () => {
-        setIsActive(false);
-    };
+//     fetchData();
+//     return () => {
+//       if (stomp.connected) {
+//         stomp.disconnect();
+//       }
+//     };
+//   }, [dispatch, notifications]);
 
-    const handleVideoSeeked = () => {
-        const video = videoRef.current;
-        if (video.currentTime === 0) {
-            setTimer(0);
-        }
+//   const user = useSelector((state) => state.auth.login.currentUser); //
+//   const userId = user?.id; // Lấy id user
 
-        // Tăng số lần tua video
-        setSeekCount((prevCount) => prevCount + 1);
+//   const sendMessage = () => {
+//     if (stompClient && stompClient.connected && newComment.trim() !== "") {
+//       const commentObject = {
+//         accountid: userId, // Thay thế bằng ID tài khoản thực tế
+//         lessionid: id, // Thay thế bằng ID bài học thực tế
+//         comment: newComment,
+//       };
 
-        // Kiểm tra nếu tua video quá 50%
-        // const percentSeeked = (video.currentTime / video.duration) * 100;
-        // if (percentSeeked > 50) {
-        //     alert('Cảnh báo: Bạn đã tua quá 50% của video.');
-        // }
-    };
+//       stompClient.send(
+//         `/app/sendNotification/` + id,
+//         {},
+//         JSON.stringify(commentObject)
+//       );
+//       setNewComment(""); // Xóa nội dung comment sau khi gửi
+//     } else {
+//       // Thử lại sau một khoảng thời gian hoặc hiển thị thông báo cho người dùng
+//     }
+//   };
+//   console.log(comments);
 
-    const handleLoadedMetadata = () => {
-        const video = videoRef.current;
-        if (video) {
-            const duration = video.duration;
-            setTotalTime(duration);
-            const thirtyPercent = duration * 0.3; // Tính toán 30% của thời gian tổng
-            setThirtyPercentTime(thirtyPercent); // Lưu giá trị 30% vào state
-        }
-    };
-
-    useEffect(() => {
-        // Kiểm tra nếu số lần tua video vượt quá 3 lần
-        if (seekCount > 3) {
-            alert('Cảnh báo: Bạn đã tua video quá 3 lần.');
-            
-            // Đặt lại giá trị của các state cần reset
-            setTimer(0);
-            setSeekCount(0);
-            setIsActive(false);
-        }
-    }, [seekCount]);
-
-    return (
-        <div>
-            <video
-                ref={videoRef}
-                width="640"
-                height="360"
-                controls
-                onPlay={handleVideoPlay}
-                onPause={handleVideoPause}
-                onSeeked={handleVideoSeeked}
-                onLoadedMetadata={handleLoadedMetadata} // Sự kiện này để lấy thời gian tổng của video
-            >
-                <source src="https://springbootcourse.s3-ap-southeast-2.amazonaws.com/1701530272001_1701250969285_IMG_2378.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20231204T135033Z&X-Amz-SignedHeaders=host&X-Amz-Expires=518399&X-Amz-Credential=AKIA3EDNXGDIUJNPCRNZ%2F20231204%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Signature=245461a3a4db9109b73ee8e2f91e701fd3c277d06f86d0754aad7f3f279b186c" type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
-            <div>
-                <p>Thời gian đồng hồ: {timer} giây</p>
-                <p>Thời gian tổng của video: {totalTime} giây</p>
-                <p>30% của thời gian tổng: {thirtyPercentTime} giây</p>
-            </div>
-            <div>
-                <button className='cursor-not-allowed opacity-50'>Next</button>
-            </div>
-        </div>
-    );
-}
+//   return (
+//     <>
+//       <div className="cmt_body">
+//         <div className="cmt_detail">
+//           <div className="cmt_contentHeading">
+//             <div>
+//               <h4>210 hỏi đáp</h4>
+//               <p className="cmt_help my-3">
+//                 (Nếu thấy bình luận spam, các bạn bấm report giúp admin nhé)
+//               </p>
+//             </div>
+//           </div>
+//           <div className="cmtBox_cmtWrapper">
+//             <div className="cmtBox_avt">
+//               <div className="w-[40px] h-[40px] rounded-full mr-5 relative">
+//                 <div className="overflow-hidden rounded-full w-full h-full">
+//                   <img src={user.avaterimage} />
+//                 </div>
+//               </div>
+//             </div>
+//             <div className="cmtBox_cmtContent">
+//               <div className="flex flex-wrap">
+//                 <textarea
+//                   id="message"
+//                   rows="4"
+//                   className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+//                   placeholder="Bạn có thắc mắc gì trong khóa học này"
+//                   value={newComment}
+//                   onChange={(e) => setNewComment(e.target.value)}
+//                 ></textarea>
+//                 <button
+//                   onClick={sendMessage}
+//                   className="mt-4 ml-auto text-14px px-4 py-2.5 bg-primary-colorrounded-2xl"
+//                 >
+//                   Bình luận
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//           {comments.map((item) => {
+//             const user = users.find((user) => user.id === item.accountid);
+//             if (user) {
+//               return (
+//                 <div className="cmt_detail_comment" key={item.id}>
+//                   <div className="shrink-0">
+//                     <div className="fallbackavt">
+//                       <img
+//                         className="object-cover rounded-full w-[37.79px]"
+//                         src={user.avaterimage}
+//                         alt="User avaterimage"
+//                       />
+//                     </div>
+//                   </div>
+//                   <div className="cmt_cmtBody">
+//                     <div className="relative">
+//                       <div className="inline-block max-w-full">
+//                         <div className="cmt_cmtContent max-w-[500px] min-w-[400px] sm:min-w-[280px]">
+//                           <div className="flex items-center justify-between">
+//                             <span className="text-black inline-block text-14px font-semibold">
+//                               {user.fullname}
+//                             </span>
+//                           </div>
+//                           <div className="cmt_Comentext">
+//                             <div className="mt-2 font-normal text-[#292929] text-14px break-words leading-7">
+//                               <p className="font-normal mt-1.5">
+//                                 {item.comment}
+//                               </p>
+//                             </div>
+//                           </div>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               );
+//             }
+//           })}
+//         </div>
+//       </div>
+//     </>
+//   );
+// };

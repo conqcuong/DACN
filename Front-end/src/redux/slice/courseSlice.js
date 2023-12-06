@@ -18,7 +18,7 @@ const courseSlice = createSlice({
             const newCourses = action.payload; // Giả sử payload là một mảng chứa các khóa học mới
             // Kiểm tra dữ liệu trùng lặp trước khi cập nhật trạng thái
             newCourses.forEach(newCourse => {
-              const isDuplicate = state.listCourses.some(course => course.id === newCourse.id); // Điều chỉnh logic so sánh của bạn ở đây
+              const isDuplicate = state.listCourses.some(course => course.id === newCourse.id); 
               if (!isDuplicate) {
                 state.listCourses.push(newCourse); // Thêm khóa học mới vào danh sách nếu không trùng lặp
               }
