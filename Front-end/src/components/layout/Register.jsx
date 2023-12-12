@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState} from 'react';
+import React, { useState} from 'react'
 import { Link,useNavigate } from 'react-router-dom';
 import { resgiterUser } from '../../redux/apiRequest';
 import { useDispatch } from 'react-redux';
@@ -69,14 +68,14 @@ export const Register = () => {
                     <div className='flex justify-between'>
                         <label className='block text-14px font-semibold my-2.5 ml-2 text-black'>Gmail:</label>
                     </div>
-                    <div className='flex border border-solid border-gray-300 h-11 overflow-hidden rounded-[44px]'>
+                    <div className='flex border border-solid border-gray-300 h-11 overflow-hidden rounded-[44px]'> 
                         <input className='border-none flex-1 px-5 py-3 outline-none' type="gmail" placeholder="Enter your gmail" onChange={(e)=>setEmail(e.target.value)}/>
                     </div>
                     <div className='flex justify-between'>
                         <label className='block text-14px font-semibold my-2.5 ml-2 text-black'>Họ tên:</label>
                     </div>
                     <div className='flex border border-solid border-gray-300 h-11 overflow-hidden rounded-[44px]'>
-                        <input className='border-none flex-1 px-5 py-3 outline-none' type="text" placeholder="Enter your username" onChange={(e)=>setUserName(e.target.value)}/>
+                        <input className='border-none flex-1 px-5 py-3 outline-none' type="text"  placeholder="Enter your username" onChange={(e)=>setUserName(e.target.value)}/>
                     </div>
                     <div className='flex justify-between'>
                         <label className='block text-14px font-semibold my-2.5 ml-2 text-black'>Mật khẩu:</label>

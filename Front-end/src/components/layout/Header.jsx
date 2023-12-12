@@ -2,8 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import logo from "../../assets/imgs/Logo_9.jpg";
 import { FaLightbulb } from "react-icons/fa6";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 import { navlist } from "../../static/data";
 import { logOutUser, saveOutUser, getAllCourses, profileUser, getAllLessons } from "../../redux/apiRequest";
 import { FaBell, FaBars, FaChevronLeft} from "react-icons/fa6";
@@ -40,12 +39,12 @@ export const Header = () => {
     const [filterData, setFilterData] = useState([]);
     const [showSearchResults, setShowSearchResults] = useState(false);
     useEffect(() => {
-        fetch("http://localhost:8889/product/getall")
+        fetch("http://localhost:8999/product/getall")
         .then((res) => res.json())
         .then((data) => {
             setFilterData(data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log());
     }, []);
     const handleFilter = (e) => {
         const value = e.target.value.toLowerCase();

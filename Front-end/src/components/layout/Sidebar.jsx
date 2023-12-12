@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import {FaRoad, FaPen, FaPlus, FaHouse, FaRocketchat} from 'react-icons/fa6'
 import {NavLink, Link} from"react-router-dom";
+import {useSelector} from "react-redux";
+import { IoLibrary } from "react-icons/io5";
 
 export const Sidebar = () => {
     // Ẩn hiện create post
@@ -24,6 +26,8 @@ export const Sidebar = () => {
        };
    }, []);
    /**/
+   const userRole = useSelector((state) => state.auth.login.currentUser?.role);
+   const role = userRole ? userRole.toLowerCase() : '';
   return (
     <>
         <div className='flex items-center flex-col px-2 sticky top-[74px] z-[8] w-[96px]'>
@@ -43,8 +47,10 @@ export const Sidebar = () => {
             </div>
             <ul className='my-2.5'>
                 <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to="/"><FaHouse className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Trang chủ</span></NavLink></li> 
-                <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to="/library"><FaRoad className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Lộ trình</span></NavLink></li>
-                <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to='/course/15'><FaRocketchat className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Chat</span></NavLink></li>
+                <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to={role === 'teach' ? "/library" : "/path"}>
+                    {role === 'teach' ? <IoLibrary className='w-5 h-5 text-[#404040]' /> : <FaRoad className='w-5 h-5 text-[#404040]' />}
+                    <span className='text-[11px] font-semibold mt-1 text-[#404040]'>{role === 'teach' ? 'Khóa Học' : 'Lộ trình'}</span></NavLink></li>
+                <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to='/chat'><FaRocketchat className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Chat</span></NavLink></li>
             </ul>
         </div>
     </>

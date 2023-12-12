@@ -1,4 +1,5 @@
 import { NotFound } from "./pages/NotFound";
+import { PaySuccess } from "./components/layout/PaySuccess"
 import { Login } from "./components/layout/Login";
 import { Register } from "./components/layout/Register";
 import { HomePage } from "./pages/HomePage";
@@ -7,6 +8,13 @@ import { CreateCoursePage } from "./pages/CreateCoursePage";
 import { CourseDetailPage } from "./pages/CourseDetailPage";
 import { CreateLessonPage } from "./pages/CreateLessonPage";
 import { LeesonPage } from "./pages/LeesonPage";
+import { ChatPage } from "./pages/ChatPage";
+import { CoursePage } from "./pages/CoursePage";
+import { EditProfilePage } from "./pages/EditProfilePage";
+import { DashboardPage } from "./pages/DashboardPage";
+import { Home } from "./components/admin/Home";
+import { User } from "./components/admin/User";
+// import { Product } from "./components/admin/Product";
 
 export {
     Login,
@@ -18,4 +26,12 @@ export {
     CourseDetailPage,
     CreateLessonPage,
     LeesonPage,
+    ChatPage,
+    CoursePage,
+    PaySuccess,
+    EditProfilePage,
+    DashboardPage,
+    Home,
+    User,
+    // Product
 }

@@ -15,16 +15,19 @@ import courseReducer from './slice/courseSlice'
 import lessonSlice from "./slice/lessonSlice";
 import userSlice from "./slice/userSlice";
 import commentSlice from "./slice/commentSlice";
+import chat from "./slice/commentSlice"
+import userCourseSlice from "./slice/userCourseSlice";
 
 const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-    // blacklist: ['course', 'lesson', 'user', 'comment'],
+    // 'course' 'userCourse'
+    // blacklist: ['lesson', 'user', 'comment', 'userCourse'],
     // whitelist: ['key1', 'key2'],
 }
 
-const rootReducer = combineReducers({auth: authReducer, course: courseReducer, lesson: lessonSlice, user: userSlice, comment: commentSlice})  
+const rootReducer = combineReducers({auth: authReducer, course: courseReducer, lesson: lessonSlice, user: userSlice, comment: commentSlice, userCourse:userCourseSlice})  
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 

@@ -1,96 +1,184 @@
-import "./init";
-import React, { useEffect, useState } from "react";
-import Stomp from "stompjs";
-import SockJS from "sockjs-client";
+import React, { useEffect, useState } from 'react';
+import { over } from 'stompjs';
+import SockJS from 'sockjs-client';
+
+var stompClient = null;
 
 export const Test = () => {
-  const [notifications, setNotifications] = useState([]);
-  const [stompClient, setStompClient] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch("http://localhost:8888/getall/2"); //lessionId
-        const data = await response.json();
-        setComments(data);
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      }
-    };
-
-    const socket = new SockJS("http://localhost:8888/ws");
-    const stomp = Stomp.over(socket);
-
-    setStompClient(stomp);
-
-    stomp.connect({}, () => {
-      stomp.subscribe("/topic/notification/loc/2", (notification) => {
-        const newNotification = JSON.parse(notification.body);
-
-        // Kiểm tra xem newNotification đã tồn tại trong state hay chưa
-        if (
-          !notifications.some(
-            (existingNotification) =>
-              existingNotification.id === newNotification.id
-          )
-        ) {
-          setNotifications((prevNotifications) => [
-            ...prevNotifications,
-            newNotification,
-          ]);
-        }
-      });
+  const [privateChats, setPrivateChats] = useState(new Map());
+    const [publicChats, setPublicChats] = useState([]);
+    const [tab, setTab] = useState("CHATROOM");
+    const [userData, setUserData] = useState({
+        username: '',
+        receivername: '',
+        accountid: 1,
+        productid: 2,
+        connected: false,
+        message: ''
     });
+    useEffect(() => {
 
-    fetchComments();
+        console.log(userData);
+        const fetchComments = async () => {
+            try {
+                const response = await fetch('http://localhost:9005/getall/1');
+                const data = await response.json();
+                setPublicChats(data);
+                console.log(data)
+            } catch (error) {
+                console.error('Error fetching comments:', error);
+            }
+        };
+        fetchComments();
+    }, [userData]);
 
-    return () => {
-      if (stomp.connected) {
-        stomp.disconnect();
-      }
-    };
-  }, [notifications]); // Thêm notifications vào dependency để sử dụng giá trị mới nhất khi kiểm tra
-
-  const sendMessage = () => {
-    if (stompClient && stompClient.connected && newComment.trim() !== "") {
-      const commentObject = {
-        accountid: 2, // Thay thế bằng ID tài khoản thực tế
-        // Thay thế bằng ID sản phẩm thực tế
-        lessionid: 2, // Thay thế bằng ID bài học thực tế
-        comment: newComment,
-      };
-
-      stompClient.send(
-        "/app/sendNotification/2",
-        {},
-        JSON.stringify(commentObject)
-      );
-      setNewComment(""); // Xóa nội dung comment sau khi gửi
-    } else {
-      // Thử lại sau một khoảng thời gian hoặc hiển thị thông báo cho người dùng
+    const connect = () => {
+        let Sock = new SockJS('http://localhost:9005/ws');
+        stompClient = over(Sock);
+        stompClient.connect({}, onConnected, onError);
     }
-  };
 
-  console.log(comments)
-  return (
-    <div>
-      <h1>Comments</h1>
-      <ul>
-        {comments.map((comment) => (
-          <li key={comment.id}>{comment.comment}</li>
-        ))}
-      </ul>
+    const onConnected = () => {
+        setUserData({ ...userData, "connected": true });
+        stompClient.subscribe('/chatroom/public', onMessageReceived);
+        stompClient.subscribe('/user/' + userData.username + '/private', onPrivateMessage);
+        userJoin();
+    }
 
-      <div>
-        <input
-          type="text"
-          placeholder="Enter your comment"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <button onClick={sendMessage}>Send Message</button>
-      </div>
-    </div>
-  );
-};
+    const userJoin = () => {
+        var chatMessage = {
+            senderName: userData.username,
+            status: "JOIN"
+        };
+        stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
+    }
+
+    const onMessageReceived = (payload) => {
+        var payloadData = JSON.parse(payload.body);
+        switch (payloadData.status) {
+            case "JOIN":
+                if (!privateChats.get(payloadData.senderName)) {
+                    privateChats.set(payloadData.senderName, []);
+                    setPrivateChats(new Map(privateChats));
+                }
+                break;
+            case "MESSAGE":
+                publicChats.push(payloadData);
+                setPublicChats([...publicChats]);
+                break;
+        }
+    }
+
+    const onPrivateMessage = (payload) => {
+        console.log(payload);
+        var payloadData = JSON.parse(payload.body);
+        if (privateChats.get(payloadData.senderName)) {
+            privateChats.get(payloadData.senderName).push(payloadData);
+            setPrivateChats(new Map(privateChats));
+        } else {
+            let list = [];
+            list.push(payloadData);
+            privateChats.set(payloadData.senderName, list);
+            setPrivateChats(new Map(privateChats));
+        }
+    }
+
+    const onError = (err) => {
+        console.log(err);
+
+    }
+
+    const handleMessage = (event) => {
+        const { value } = event.target;
+        setUserData({ ...userData, "message": value });
+    }
+    const sendValue = () => {
+        if (stompClient) {
+            var chatMessage = {
+                senderName: userData.username,
+                message: userData.message,
+                accountid: 1, //************** */
+                productid: 2, //************* */
+                status: "MESSAGE"
+            };
+            console.log(chatMessage);
+            stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
+            setUserData({ ...userData, "message": "" });
+        }
+    }
+
+    const sendPrivateValue = () => {
+        if (stompClient) {
+            var chatMessage = {
+                senderName: userData.username,
+                receiverName: tab,
+                accountid: 1,
+                productid: 2,
+                message: userData.message,
+                status: "MESSAGE"
+            };
+
+            if (userData.username !== tab) {
+                privateChats.get(tab).push(chatMessage);
+                setPrivateChats(new Map(privateChats));
+            }
+            stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
+            setUserData({ ...userData, "message": "" });
+        }
+    }
+
+    const handleUsername = (event) => {
+        const { value } = event.target;
+        setUserData({ ...userData, "username": value });
+    }
+
+    const registerUser = () => {
+        connect();
+    }
+
+    return (
+        <div className="container">
+            {userData.connected ?
+                <div className="chat-box">
+                    <div className="member-list">
+                        <ul>
+                            <li onClick={() => { setTab("CHATROOM") }} className={`member ${tab === "CHATROOM" && "active"}`}>Chatroom</li>
+                            {[...privateChats.keys()].map((name, index) => (
+                                <li onClick={() => { setTab(name) }} className={`member ${tab === name && "active"}`} key={index}>{name}</li>
+                            ))}
+                        </ul>
+                    </div>
+                    {tab === "CHATROOM" && <div className="chat-content">
+                        <ul className="chat-messages">
+                            {publicChats.map((chat, index) => (
+                                <li className={`message ${chat.senderName === userData.username && "self"}`} key={index}>
+                                    {chat.senderName !== userData.username && <div className="avatar">{chat.senderName}</div>}
+                                    <div className="message-data">{chat.message}</div>
+                                    {chat.senderName === userData.username && <div className="avatar self">{chat.senderName}</div>}
+                                </li>
+                            ))}
+                        </ul>
+
+                        <div className="send-message">
+                            <input type="text" className="input-message" placeholder="enter the message" value={userData.message} onChange={handleMessage} />
+                            <button type="button" className="send-button" onClick={sendValue}>send</button>
+                        </div>
+                    </div>}
+                </div>
+                :
+                <div className="register">
+                    <input
+                        id="user-name"
+                        placeholder="Enter your name"
+                        name="userName"
+                        value={userData.username}
+                        onChange={handleUsername}
+                        margin="normal"
+                    />
+                    <button type="button" onClick={registerUser}>
+                        connect
+                    </button>
+                </div>}
+        </div>
+    )
+}

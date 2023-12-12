@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux'
 import { getOneCourse } from '../../redux/apiRequest';
 
 export const CourseDetail = () => {
@@ -46,13 +45,7 @@ export const CourseDetail = () => {
                     <div className='mt-3 mb-12'>
                         {lessonsForCourse &&
                             lessonsForCourse.map((items, index) => (
-                            <div key={items.id} className={`mt-2 cursor-pointer border border-[#ebebeb] p-0 border-solid flex justify-between ${
-                                index === 0 ? '' : 'pointer-events-none opacity-50' // Phần tử đầu không bị làm mờ
-                                }`} onClick={() => {
-                                    if (index === 0) {
-                                    // Xử lý khi click vào phần tử đầu tiên
-                                    console.log('Clicked on the first element.');
-                                }}}>
+                            <div key={items.id} className={`mt-2 cursor-pointer border border-[#ebebeb] p-0 border-solid flex justify-between `}>
                                 <Link to={`/course/lesson/${items.id}`} className='w-[83%]'>
                                     <h5 className='text-inherit text-16px font-semibold'>
                                         <div className='text-text-color text-16px overflow-hidden py-3.5 pr-7.5 pl-12'>

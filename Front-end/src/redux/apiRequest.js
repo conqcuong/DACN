@@ -25,6 +25,18 @@ import {getAllUsersStart,
 import {getAllCmtsStart, 
         getAllCmtsSuccess, 
         getAllCmtsFail} from "./slice/commentSlice"
+import {
+    getAllChatsStart, 
+    getAllChatsSuccess, 
+    getAllChatsFail
+} from "./slice/chatSlide"
+
+import {
+    getAllPayStart,
+    getAllPaySuccess,
+    getAllPayFail
+} from "./slice/userCourseSlice"
+
 // authSlice
 
 export const loginUser = async(user, dispatch, showToast, navigate) =>{
@@ -116,7 +128,7 @@ export const getAllUsers = async (dispatch) => {
 export const getAllCourses = async (dispatch) => {
     dispatch(getAllCoursesStart());
     try {
-        const res = await axios.get("http://localhost:8889/product/getall");
+        const res = await axios.get("http://localhost:8999/product/getall");
         dispatch(getAllCoursesSuccess(res.data));
     } catch (err) {
         dispatch(getAllCoursesFail());
@@ -197,3 +209,41 @@ export const getAllCmts = async (dispatch) => {
         dispatch(getAllCmtsFail());
     }
 }
+
+// CHAT
+
+export const getAllChats = async (dispatch) => {
+    dispatch(getAllChatsStart());
+    try {
+        const res = await axios.get("http://localhost:9005/getall/1");
+        dispatch(getAllChatsSuccess(res.data));
+    } catch (err) {
+        dispatch(getAllChatsFail());
+    }
+}
+
+// User Course
+
+// export const getOneUsCCourse = async (dispatch, id) => {
+//     dispatch(getOneUsCStart());
+//     try {
+//       const response = await axios.get(`http://localhost:3000/courseUser/${id}`);
+//       const course = response.data;
+//       dispatch(getOneUsCSuccess(course));
+//     } catch (err) {
+//       dispatch(getOneUsCFail());
+//     }
+// };
+
+// 
+// Lấy các khóa học đã mua của người dùng
+export const getPayMent = async (dispatch, userId) => {
+    dispatch(getAllPayStart());
+    try {
+      const response = await axios.get(`http://localhost:9000/ProductAccount/accountregister/${userId}`);
+      const payList = response.data;
+      dispatch(getAllPaySuccess(payList));
+    } catch (err) {
+      dispatch(getAllPayFail());
+    }
+};
