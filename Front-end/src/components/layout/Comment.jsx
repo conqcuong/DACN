@@ -11,6 +11,7 @@ export const Comment = () => {
   const [notifications, setNotifications] = useState([]);
   const [stompClient, setStompClient] = useState(null);
   const [newComment, setNewComment] = useState("");
+  const [filterData, setFilterData] = useState([]);
   const { id } = useParams();
   const lessonId = parseInt(id);
   /**/
@@ -18,13 +19,21 @@ export const Comment = () => {
   const cmts = useSelector((state) => state.comment.listComments);
   const filteredLessonIds = cmts.filter((item) => item.lessionid === lessonId);
   const users = useSelector((state) => state.user.listUsers);
-
+  console.log()
+  console.log(filterData);
+  // console.log(users);
   useEffect(() => {
     //
     const fetchData = async () => {
       try {
         await getAllUsers(dispatch);
         await getAllCmts(dispatch);
+        // const response = await fetch("http://localhost:8888/getall");
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok.');
+        //     }
+        //     const data = await response.json();
+        //     setFilterData(data);
       } catch (err) {
         console.log(err);
       }
@@ -87,7 +96,7 @@ export const Comment = () => {
         <div className="cmt_detail">
           <div className="cmt_contentHeading">
             <div>
-              <h4>210 hỏi đáp</h4>
+              <h4>1 hỏi đáp</h4>
               <p className="cmt_help my-3">
                 (Nếu thấy bình luận spam, các bạn bấm report giúp admin nhé)
               </p>

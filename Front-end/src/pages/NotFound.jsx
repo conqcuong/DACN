@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../assets/imgs/f8-icon.png'
+import logo from '../assets/imgs/Logo_9.jpg'
 import { Link } from 'react-router-dom'
 
 export const NotFound = () => {
@@ -20,7 +20,7 @@ export const NotFound = () => {
                     </ul>
                     <p><Link className='py-3.5 px-7 text-16px font-semibold text-center inline-block rounded-[999px] bg-primary-color my-7 text-white' to='/'>Truy cập trang chủ</Link></p>
                 </div>
-                <div className='flex items-end text-gray-color flex-1 text-14px font-bold justify-center text-center w-full mb-5 sm:hidden'>© 2018 - 2023 F8. Nền tảng học lập trình hàng đầu Việt Nam</div>
+                <div className='flex items-end text-gray-color flex-1 text-14px font-bold justify-center text-center w-full mb-5 sm:hidden'>© 2018 - 2023. Nền tảng học lập trình hàng đầu Việt Nam</div>
             </div>
         </div>
     </>

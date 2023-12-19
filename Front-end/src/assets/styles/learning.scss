@@ -1,0 +1,229 @@
+/*Learning_Paths*/
+.learningPathsList_content{
+    display: flex;
+    margin-top: 24px;
+  }
+  
+  .learningPathsList_content .learningPathItem_wrapper{
+    border: 2px solid #e8e8e8;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    width: 500px;
+  }
+  
+  .learningPathItem_wrapper+ .learningPathItem_wrapper{
+    margin-left: 24px;
+  }
+  
+  .learningPathItem_wrapper .learningPathItem_body{
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .learningPathItem_info{
+    flex: 1 1;
+  }
+  
+  .learningPathItem_info a{
+    color: #242424;
+    display: block;
+    font-size: 20px;
+    font-weight: 900;
+    padding-bottom: 14px;
+  }
+  
+  .learningPathItem_info .learningPathItem_desc{
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  .learningPathItem_thumb-wrap{
+    align-items: center;
+    display: flex;
+    padding-left: 24px;
+  }
+  
+  .learningPathItem_thumb-wrap a{
+    align-items: center;
+    border: 5px solid #f05123;
+    border-radius: 50%;
+    display: flex;
+    height: 122px;
+    justify-content: center;
+    overflow: hidden;
+    width: 122px;
+  }
+  
+  .learningPathItem_thumb-wrap img{
+    border-radius: 50%;
+    height: 98px;
+    object-fit: cover;
+    width: 98px;
+  }
+  
+  .learningPathItem_cta{
+    display: flex;
+    margin: auto 0 28px;
+  }
+  
+  /* root */
+  
+  :root{
+    --size: 40px;
+    --progress: 25;
+    --bar-width: 2px;
+    --shadow-bg-hover-color: #d4d4d4;
+    --darkreader-border--bar-width: 2px;
+    --darkreader-bg--shadow-bg-hover-color: #303436;
+    --progress: grayscale(75%);
+    --font-size: 15px;
+    --line-height: 1.6;
+  }
+  
+  .circular-wrapper{
+    clear: both;
+    height: 40px;
+    height: var(--size,40px);
+    position: relative;
+    width: 40px;
+    width: var(--size,40px);
+  }
+  
+  .circularProgressBar_shadow{
+    border: var(--bar-width) solid var(--shadow-border-color,#d4d4d4);
+    border-radius: 50%;
+    height: 100%;
+    transition: background-color .3s ease;
+    width: 100%;
+  }
+  
+  .circularProgressBar_body{
+    bottom: 2px;
+    left: 2px;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+  }
+  
+  .circularProgressBar_body a{
+    align-items: center;
+    border-radius: 50%;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+  }
+  
+  .circularProgressBar_body img{
+    -webkit-filter: var(--progress);
+    filter: var(--progress);
+    height: 22px;
+    object-fit: cover;
+    width: 22px;
+  }
+  
+  .btn_primary{
+    background-color: #f05123;
+    color: #fff;
+  }
+  
+  .learningPathItem_wrapper+.learningPathItem_wrapper {
+    margin-left: 24px;
+  }
+  
+  .suggestionBox_wrapper{
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    overflow: hidden;
+  }
+  
+  .suggestionBox_wrapper .suggestionBox_info{
+    width: 400px;
+  }
+  
+  .suggestionBox_info h2{
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.6;
+    margin: 20px 0;
+  }
+  
+  .suggestionBox_info p{
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 14px 0;
+  }
+  
+  .suggestionBox_image img{
+    position: relative;
+    right: -44px;
+    width: 420px;
+  }
+
+  .info_btn{
+    border: 2px solid #292929;
+    border-radius: 999px;
+    color: #292929;
+    display: inline-block;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 9px 16px;
+    text-align: center;
+    transition: .2s ease;
+    font-size: 14px;
+  }
+
+@media(min-width: 0px) and (max-width: 1023px){
+    .learningPathsList_content{
+        flex-direction: column;
+    }
+
+    .learningPathItem_wrapper{
+        width: 100% !important;
+    }
+
+    .learningPathItem_wrapper+ .learningPathItem_wrapper{
+        margin-left: 0 !important;
+        margin-top: 16px !important;
+    }
+
+    
+}
+
+@media(max-width: 740px){
+    .learningPathItem_thumb-wrap{
+        display: none;
+    }
+
+    .learningPathItem_cta{
+        display: none;
+    }
+
+    .btn_primary{
+        width: 100%;
+    }
+
+    .suggestionBox_image{
+        display: none;
+    }
+
+    .suggestionBox_wrapper{
+        flex-direction: column;
+        padding: 0 16px;
+    }
+
+    .suggestionBox_info{
+        width: 100% !important;
+    }
+
+    .info_btn{
+        padding: 9px 16px !important;
+        width: 100%;
+    }
+}

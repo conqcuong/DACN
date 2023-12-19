@@ -15,6 +15,9 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { Home } from "./components/admin/Home";
 import { User } from "./components/admin/User";
 // import { Product } from "./components/admin/Product";
+import { QuizPage } from "./pages/QuizPage";
+import { VideoLivePage } from "./pages/VideoLivePage";
+import { LearningpathPage } from "./pages/LearningpathPage";
 
 export {
     Login,
@@ -33,5 +36,8 @@ export {
     DashboardPage,
     Home,
     User,
+    QuizPage,
+    VideoLivePage,
+    LearningpathPage
     // Product
 }

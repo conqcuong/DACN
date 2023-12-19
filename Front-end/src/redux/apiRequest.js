@@ -34,7 +34,13 @@ import {
 import {
     getAllPayStart,
     getAllPaySuccess,
-    getAllPayFail
+    getAllPayFail,
+    getAllPayLessonStart,
+    getAllPayLessonSuccess,
+    getAllPayLessonFail,
+    editPayLessonStart,
+    editPayLessonSuccess,
+    editPayLessonFail
 } from "./slice/userCourseSlice"
 
 // authSlice
@@ -245,5 +251,26 @@ export const getPayMent = async (dispatch, userId) => {
       dispatch(getAllPaySuccess(payList));
     } catch (err) {
       dispatch(getAllPayFail());
+    }
+};
+
+export const getPayLesson = async (dispatch, userId, courseId) => {
+    dispatch(getAllPayLessonStart());
+    try {
+      const response = await axios.get(`http://localhost:9001/lessionAccount/getlessionproduct/${courseId}/${userId}`);
+      const payList = response.data;
+      dispatch(getAllPayLessonSuccess(payList));
+    } catch (err) {
+      dispatch(getAllPayLessonFail());
+    }
+};
+
+export const editPayLesson = async (lesson, dispatch) =>{
+    dispatch(editPayLessonStart());
+    try{
+        await axios.post("http://localhost:9001/lessionAccount/create", lesson);
+        dispatch(editPayLessonSuccess());
+    }catch(err){
+        dispatch(editPayLessonFail());
     }
 };

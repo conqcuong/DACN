@@ -1,23 +1,26 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Suspense } from "react";
 import logo from "../assets/imgs/Logo_9.jpg";
 import { FaChevronLeft, FaChevronRight, FaBars, FaArrowRight, FaComments, FaXmark } from 'react-icons/fa6'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { Comment } from "../components/layout/Comment";
+import ReactPlayer from 'react-player';
 import { format } from 'date-fns';
 import axios from "axios";
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
-export const LeesonPage = () => {
+export const VideoLivePage = () => {
+    const dispatch = useDispatch();
     const { id } = useParams();
-    const navigateTo = useNavigate();   
-    const dispatch = useDispatch(); 
+    const navigateTo = useNavigate();
     // ép kiểu về int
     const lessonId = parseInt(id);
     const course = useSelector((state)=> state.course.listCourses); 
     const lesson = useSelector((state)=> state.lesson.listLessons);
     // lấy bài học có cùng id
     const getLesson = lesson.find(u => u.id === lessonId);
-    const getcourseFind = course.find(g => g.id ===  getLesson.productId);
+    const getcourseFind = course.find(g => g.id ===  getLesson.productId)
     // Lấy danh sách bài học
     const lessonsForCourse = lesson.filter(lesson => lesson.productId === getcourseFind.id); 
     // Kiểm xoát xem video
@@ -66,9 +69,9 @@ export const LeesonPage = () => {
         closeCmt();
     };
     //
-    const updatedAtString = getLesson.date; // Chuỗi ngày từ getLesson
-    const updatedAtDate = new Date(updatedAtString); // Chuyển đổi thành đối tượng Date
-    const formattedUpdatedAt = format(updatedAtDate, "MMMM 'năm' yyyy"); // Định dạng ngày
+    // const updatedAtString = getLesson.date; // Chuỗi ngày từ getLesson
+    // const updatedAtDate = new Date(updatedAtString); // Chuyển đổi thành đối tượng Date
+    // const formattedUpdatedAt = format(updatedAtDate, "MMMM 'năm' yyyy"); // Định dạng ngày
     // console.log(formattedUpdatedAt)
     //
 
@@ -117,13 +120,13 @@ export const LeesonPage = () => {
     };
 
     useEffect(() => {
-        if ((timer > thirtyPercentTime || nextPayCheck === 1) && (timer !== 0 || thirtyPercentTime !== 0)) {
+        if (timer >= thirtyPercentTime || nextPayCheck === 1) {
             setAllowNext(true); // Cho phép chuyển đến video tiếp theo
         } else {
             setAllowNext(false); // Không cho phép chuyển đến video tiếp theo
         }
     }, [timer, thirtyPercentTime]);
-    // console.log(nextPayCheck)
+
 
     useEffect(() => {
         // Kiểm tra nếu số lần tua video vượt quá 3 lần
@@ -152,12 +155,13 @@ export const LeesonPage = () => {
     // console.log(nextPayCheck);
     // console.log(thirtyPercentTime)
     const lessonPay = payLesson[currentVideoIndex]
-    const nextPayCheck = lessonPay ? lessonPay.success : null;
+    const nextPayLesson = payLesson[currentVideoIndex + 1]
+    const nextPayCheck = nextPayLesson ? nextPayLesson.success : null;
     // console.log(nextPayCheck)
     const handleNextVideo = (e) => {
         const nextVideo = lessonsForCourse[currentVideoIndex + 1];
         const nextVideoId = nextVideo ? nextVideo.id : null;
-        const nextPayLesson = payLesson[currentVideoIndex];
+        const nextPayLesson = payLesson[currentVideoIndex + 1];
         const nextPayCheck = nextPayLesson ? nextPayLesson.success : null;
     
         if ((timer >= thirtyPercentTime || nextPayCheck === 1) && nextVideoId) {
@@ -171,29 +175,20 @@ export const LeesonPage = () => {
                 success: 1,
                 productid: lessonPay.productid
             };
-            if (nextPayCheck !== 1) {
-                // Perform axios.post if nextPayCheck is not equal to 1
-                axios.post("http://localhost:9001/lessionAccount/create", editLesson)
-                    .then(response => {
-                        console.log("Bài học đã được thêm vào lessionAccount:", response.data);
-                        setTimer(0);
-                        setSeekCount(0);
-                        setIsActive(false);
-                        setCurrentVideoIndex(currentVideoIndex + 1);
-                        navigateTo(`/course/lesson/${nextVideoId}`);
-                    })
-                    .catch(error => {
-                        console.error("Lỗi khi thêm bài học vào lessionAccount:", error);
-                        // Xử lý lỗi nếu cần
-                    });
-            } else {
-                // Execute these lines if nextPayCheck equals 1
-                setTimer(0);
-                setSeekCount(0);
-                setIsActive(false);
-                setCurrentVideoIndex(currentVideoIndex + 1);
-                navigateTo(`/course/lesson/${nextVideoId}`);
-            }
+    
+            axios.post("http://localhost:9001/lessionAccount/create", editLesson)
+                .then(response => {
+                    console.log("Bài học đã được thêm vào lessionAccount:", response.data);
+                    setTimer(0);
+                    setSeekCount(0);
+                    setIsActive(false);
+                    setCurrentVideoIndex(currentVideoIndex + 1);
+                    navigateTo(`/course/lesson/${nextVideoId}`);
+                })
+                .catch(error => {
+                    console.error("Lỗi khi thêm bài học vào lessionAccount:", error);
+                    // Xử lý lỗi nếu cần
+                });
         } else {
             console.log("Lỗi");
         }
@@ -218,47 +213,99 @@ export const LeesonPage = () => {
         setSeekCount(0);
         setIsActive(false);
     };
-    // console.log(allowNext)
+    // console.log(getLesson)
     // console.log(currentVideoIndex);
     // lessonsForCourse
-    // Tự động hoàn thành khóa học ở cuối mảng
-    // const [dataAdded, setDataAdded] = useState(false);
-    // useEffect(() => {
-    //     if (!dataAdded) {
-    //         const isLastVideo = currentVideoIndex === lessonsForCourse.length - 1;
-    //         const enoughTimeCondition = timer >= thirtyPercentTime || nextPayCheck === 1;
+    const [dataAdded, setDataAdded] = useState(false);
+    useEffect(() => {
+        if (!dataAdded) {
+            const isLastVideo = currentVideoIndex === lessonsForCourse.length - 1;
+            const enoughTimeCondition = timer >= thirtyPercentTime || nextPayCheck === 1;
 
-    //         if (isLastVideo && enoughTimeCondition) {
-    //             const editLesson = {
-    //                 id: lessonPay.id,
-    //                 lessionId: lessonPay.lessionId,
-    //                 accountId: lessonPay.accountId,
-    //                 score: 0,
-    //                 time: null,
-    //                 success: 1,
-    //                 productid: lessonPay.productid
-    //             };
+            if (isLastVideo && enoughTimeCondition) {
+                const editLesson = {
+                    id: lessonPay.id,
+                    lessionId: lessonPay.lessionId,
+                    accountId: lessonPay.accountId,
+                    score: 0,
+                    time: null,
+                    success: 1,
+                    productid: lessonPay.productid
+                };
 
-    //             // Gửi yêu cầu POST để thêm dữ liệu
-    //             axios.post("http://localhost:9001/lessionAccount/create", editLesson)
-    //                 .then(response => {
-    //                     console.log("Dữ liệu đã được thêm vào cuối mảng:", response.data);
-    //                     // Thực hiện các hành động khác nếu cần
-    //                     setDataAdded(true); // Đặt cờ là true để ngăn việc gửi yêu cầu tiếp theo
-    //                 })
-    //                 .catch(error => {
-    //                     console.error("Lỗi khi thêm dữ liệu vào cuối mảng:", error);
-    //                     // Xử lý lỗi nếu cần
-    //                 });
-    //         }
-    //     }
-    // }, [currentVideoIndex, lessonsForCourse, timer, nextPayCheck, dataAdded]);
+                // Gửi yêu cầu POST để thêm dữ liệu
+                axios.post("http://localhost:9001/lessionAccount/create", editLesson)
+                    .then(response => {
+                        console.log("Dữ liệu đã được thêm vào cuối mảng:", response.data);
+                        // Thực hiện các hành động khác nếu cần
+                        setDataAdded(true); // Đặt cờ là true để ngăn việc gửi yêu cầu tiếp theo
+                    })
+                    .catch(error => {
+                        console.error("Lỗi khi thêm dữ liệu vào cuối mảng:", error);
+                        // Xử lý lỗi nếu cần
+                    });
+            }
+        }
+    }, [currentVideoIndex, lessonsForCourse, timer, nextPayCheck, dataAdded]);
+    //
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(true);
+
+    const [postData, setPostData] = useState({
+        title: '',
+        description: '',
+        accountid: 1, // Thay đổi userId theo nhu cầu
+    });
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setPostData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async () => {
+        try {
+            console.log(postData);
+
+            const response = await axios.post('http://localhost:9008/createStream', postData);
+            if (response.data) {
+
+                console.log('Data from server:', response.data);
+
+                setPostData(response.data);
+            }
+
+            setLoading(false);
+        } catch (error) {
+            console.error('Error creating post:', error);
+        }
+
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Thay thế URL bằng URL thực tế của API bạn muốn lấy dữ liệu
+                const response = await axios.get('http://localhost:9008/get-key');
+                setData(response.data)
+
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
     return (
         <section className='w-full mx-auto'>
             <div className='flex items-center bg-[#29303b] relative z-1 h-[50px]'>
                 <div className='flex cursor-pointer h-[50px] w-[60px] transition-background-color duration-200 ease-linear'><Link to='/'><FaChevronLeft className='mx-[25px] my-[17px] text-white'/></Link></div>
                 <Link className='ml-2 relative sm:hidden' to='/'><img className='h-[30px] rounded-lg' src={logo}/></Link>
-                <div className='text-14px font-bold text-white ml-4 sm:ml-0'>{getcourseFind.name}</div>
+                <div className='text-14px font-bold text-white ml-4 sm:ml-0'>Bài Học Video</div>
             </div>
             <div className={`mt-[50px] bottom-[50px] border-l border-[#e7e7e7] border-solid fixed lg:right-0 top-0 lg:z-0 z-2 sm:left-0 md:left-0' ${isSplit ? 'lg:w-[23%] z-10 md:bg-white sm:bg-white ' : 'hidden'} transition-width duration-200 ease-linear`}>
             <div className='px-5'>
@@ -283,25 +330,24 @@ export const LeesonPage = () => {
                     <div className='pt-[56.25%] relative'>
                         <div className='w-full h-full absolute inset-0 overflow-hidden'>
                             {/* Sử dụng key={getLesson.id} để tránh load trang 2 lần  */}
-                            <video
-                                key={getLesson.id}
+                            {/* <ReactPlayer
+                                key={1}
+                                url={`http://localhost:8080/hls/${data}.m3u8`}
+                                controls={true}
+                                playing={isPlaying}
                                 ref={videoRef}
                                 className="w-full h-full aspect-video pointer-events-auto"
-                                controls
                                 onPlay={handleVideoPlay}
                                 onPause={handleVideoPause}
                                 onSeeked={handleVideoSeeked}
-                                onLoadedMetadata={handleLoadedMetadata} // Sự kiện này để lấy thời gian tổng của video
-                            >
-                                    {/* {getLesson.videoapi} */}
-                                    <source src={getLesson.videoapi} type="video/mp4" />
-                            </video>
+                                onLoadedMetadata={handleLoadedMetadata}
+                            /> */}
                         </div>
                     </div>
                 </div>
                 <div className={`min-h-[400px] sm:px-4 sm:mt-5 ${isSplit ? 'px-[8.5%]' : 'lg:px-[16%] md:px-[8.5%]'} transition-width duration-200 ease-linear`}>
-                    <h1 className='text-[28px] mt-8 mb-2 font-semibold sm:mt-0 sm:line-clamp-2'>{getLesson.title}</h1>
-                    <p className='text-13px mt-3 '>Cập nhật {formattedUpdatedAt}</p>
+                    <h1 className='text-[28px] mt-8 mb-2 font-semibold sm:mt-0 sm:line-clamp-2'>Test video</h1>
+                    <p className='text-13px mt-3 '>Cập nhật 18/12/2032</p>
                 </div>
             </div>
             <div className='flex items-center lg:justify-center z-2 bg-[#f0f0f0] lg:h-[50px] bottom-0 shadow-[rgba(0,0,0,.1)] left-0 fixed right-0 h-[60px] justify-end'>
@@ -309,15 +355,17 @@ export const LeesonPage = () => {
                     <FaChevronLeft/>
                     <span className='rounded-md text-[#404040] font-semibold px-3 py-2'>BÀI TRƯỚC</span>
                 </button>
-                <button
-                    className={`flex rounded-md text-[#404040] text-14px font-semibold px-3 py-2 duration-300 ease-in-out items-center ml-3 md:mr-4 md:p-2.5 ${
-                    (allowNext && currentVideoIndex !== lessonsForCourse.length - 1) ? '' : 'cursor-not-allowed opacity-50'
-                }`}
-                    onClick={allowNext && currentVideoIndex !== lessonsForCourse.length - 1 ? handleNextVideo : undefined}
-                >
-                    <span className='rounded-md text-[#404040] font-semibold px-3 py-2'>BÀI TIẾP THEO</span>
+                {allowNext ? (
+                    <button  className={`flex rounded-md text-[#404040] text-14px font-semibold px-3 py-2 duration-300 ease-in-out items-center ml-3 md:mr-4 md:p-2.5 ${currentVideoIndex === lessonsForCourse.length - 1 ? 'cursor-not-allowed opacity-50' : ''}`} onClick={currentVideoIndex !== lessonsForCourse.length - 1 ? handleNextVideo : undefined}>
+                        <span className='rounded-md text-[#404040] font-semibold px-3 py-2' >BÀI TIẾP THEO</span>
+                        <FaChevronRight/>
+                </button>
+                ) : (
+                    <button  className={`flex rounded-md text-[#404040] text-14px font-semibold px-3 py-2 duration-300 ease-in-out items-center ml-3 md:mr-4 md:p-2.5 cursor-not-allowed opacity-50`}>
+                    <span className='rounded-md text-[#404040] font-semibold px-3 py-2' >BÀI TIẾP THEO</span>
                     <FaChevronRight/>
                 </button>
+                )}
                 <div className='flex bottom-0 cursor-pointer lg:justify-end absolute right-0 top-0 lg:w-[30%] items-center justify-start md:left-0 md:w-[26%] sm:left-0'>
                     <button onClick={toggleSplit} className='flex bg-white rounded-full shrink-0 justify-center text-16px h-[38px] w-[38px] mx-5 items-center'>              
                         {isSplit ? <FaArrowRight/> : <FaBars/>}

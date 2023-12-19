@@ -22,8 +22,8 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-    // 'course' 'userCourse'
-    // blacklist: ['lesson', 'user', 'comment', 'userCourse'],
+    // 'course' 'userCourse' 'lesson',
+    blacklist: ['user', 'comment', 'userCourse'],
     // whitelist: ['key1', 'key2'],
 }
 

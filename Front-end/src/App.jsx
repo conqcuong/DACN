@@ -18,11 +18,13 @@ import {
     DashboardPage,
     Home,
     User,
+    QuizPage,
+    VideoLivePage,
+    LearningpathPage
     // Product,
 } from "./Routes"
-import { Test } from "./test/Test";
-import { TestVideo } from "./test/TestVideo";
 // import { TestAd } from "./test/TestAd";
+import { Test3 } from "./test/Test3";
 
 function App() {
   const userRole = useSelector((state) => state.auth.login.currentUser?.role);
@@ -36,6 +38,7 @@ function App() {
             <Route path='/dashboard' element={<DashboardPage/>}>
               <Route index element={<Home />} />
               <Route path='user' element={<User />} />
+              {/* <Route path='pay' element={<Test2 />} /> */}
               {/* <Route path='product' element={<Product />} /> */}
             </Route>
             <Route path='/' element={<HomePage/>} />
@@ -46,9 +49,10 @@ function App() {
             <Route path='/chat' element={<ChatPage/>} />
             <Route path='/paymentsuccess' element={<PaySuccess/>} />
             <Route path='/editprofile' element={<EditProfilePage/>} />
-            <Route path='/test' element={<Test/>} />
-            <Route path='/test1/:id' element={<TestVideo/>} />
-            {/* <Route path='/test2' element={<TestAd/>} /> */}
+            <Route path='quiz' element={<QuizPage/>} />
+            <Route path='video' element={<VideoLivePage/>} />
+            <Route path='/learningpath' element={<LearningpathPage/>} />
+            <Route path='/test' element={<Test3/>} />
             {/* Chỉ cho Admin và Teach */}
             <Route path='/library' element={userCanAccess ? <LibraryCoursePage /> : <NotFound />} />
             <Route path='/course/:id' element={ userCanAccess ? <CourseDetailPage /> : <NotFound />} />

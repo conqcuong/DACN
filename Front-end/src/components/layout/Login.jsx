@@ -2,7 +2,7 @@ import React, { useState, useEffect  } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser, profileUser } from '../../redux/apiRequest';
 import { useDispatch } from 'react-redux';
-import logo from '../../assets/imgs/f8-icon.png'
+import logo from '../../assets/imgs/Logo_9.jpg'
 import { toast } from "react-toastify";
 import showToast from '../../redux/showToast'
 import { useSelector } from "react-redux";

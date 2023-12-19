@@ -29,7 +29,7 @@ export const ChatContent = ({ selectedItem }) => {
   useEffect(() => {
     if (selectedItem) {
       setSelectedItemContent(selectedItem);
-
+  
       // Xác định courseId từ selectedItem nếu có giá trị và chứa id
       const courseId = selectedItem.id || null;
       const courseIdFromSelectedItem = selectedItem.id || null;
@@ -39,7 +39,12 @@ export const ChatContent = ({ selectedItem }) => {
         ...prevUserData,
         productid: courseId,
       }));
-
+    }
+  }, [selectedItem]);
+  
+  useEffect(() => {
+    if (courseId) {
+  
       const fetchComments = async () => {
         try {
           // Sử dụng courseId được xác định để fetch data
@@ -53,15 +58,15 @@ export const ChatContent = ({ selectedItem }) => {
           console.error("Error fetching comments:", error);
         }
       };
-      connect();
+  
       fetchComments();
-      // Các hành động khác cần thực hiện khi chọn selectedItem
-
+      connect();
       return () => {
         disconnect();
       };
     }
-  }, [dispatch, selectedItem]);
+  }, [courseId, dispatch]);
+  
   // const scrollToBottom = () => {
   //     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   //   };
@@ -74,6 +79,7 @@ export const ChatContent = ({ selectedItem }) => {
     let Sock = new SockJS("http://localhost:9005/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
+
   };
 
   const disconnect = () => {
@@ -86,11 +92,8 @@ export const ChatContent = ({ selectedItem }) => {
 
   const onConnected = () => {
     setUserData({ ...userData, connected: true });
-    stompClient.subscribe(`/chatroom/public/16 `, onMessageReceived);
-    stompClient.subscribe(
-      "/user/" + userData.username + "/private",
-      onPrivateMessage
-    );
+    stompClient.subscribe(`/chatroom/public/${courseId}`, onMessageReceived);
+    console.log(courseId + "connect");
     userJoin();
   };
 
@@ -99,7 +102,7 @@ export const ChatContent = ({ selectedItem }) => {
       senderName: userData.username,
       status: "JOIN",
     };
-    stompClient.send(`/app/message/16`, {}, JSON.stringify(chatMessage));
+    stompClient.send(`/app/message/${selectedItemContent}`, {}, JSON.stringify(chatMessage));
   };
 
   const onMessageReceived = (payload) => {
@@ -122,21 +125,6 @@ export const ChatContent = ({ selectedItem }) => {
     }
   };
 
-  const onPrivateMessage = (payload) => {
-    var payloadData = JSON.parse(payload.body);
-    setPrivateChats((prevPrivateChats) => {
-      const newPrivateChats = new Map(prevPrivateChats);
-      const senderName = payloadData.senderName;
-      const message = payloadData;
-      if (newPrivateChats.has(senderName)) {
-        const updatedMessages = [...newPrivateChats.get(senderName), message];
-        newPrivateChats.set(senderName, updatedMessages);
-      } else {
-        newPrivateChats.set(senderName, [message]);
-      }
-      return newPrivateChats;
-    });
-  };
 
   const onError = (err) => {
     console.log(err);
@@ -156,28 +144,8 @@ export const ChatContent = ({ selectedItem }) => {
         productid: courseId, // Thiết lập productid từ state
         status: "MESSAGE",
       };
-      stompClient.send(`/app/message/16`, {}, JSON.stringify(chatMessage));
-      setUserData({ ...userData, message: "" });
-    }
-  };
-
-  const sendPrivateValue = () => {
-    if (stompClient) {
-      var chatMessage = {
-        senderName: userData.username,
-        receiverName: tab,
-        accountid: userId,
-        productid: courseId, // Thiết lập productid từ state
-        message: userData.message,
-        status: "MESSAGE",
-      };
-
-      // Gửi tin nhắn riêng tư với productid chính xác
-      stompClient.send(
-        `/app/private-message/16`,
-        {},
-        JSON.stringify(chatMessage)
-      );
+      console.log(courseId + "loc");
+      stompClient.send(`/app/message/${courseId}`, {}, JSON.stringify(chatMessage));
       setUserData({ ...userData, message: "" });
     }
   };
@@ -216,11 +184,10 @@ export const ChatContent = ({ selectedItem }) => {
                         return (
                           <div
                             key={item.id}
-                            className={`chat__item ${
-                              item.senderName === userData.username
-                                ? "self"
-                                : "other"
-                            }`}
+                            className={`chat__item ${item.senderName === userData.username
+                              ? "self"
+                              : "other"
+                              }`}
                           >
                             <div className="chat__item__content">
                               <div className="text-11px font-semibold user__name">

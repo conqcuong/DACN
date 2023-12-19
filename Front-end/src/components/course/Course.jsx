@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router-dom';
 import {FaBatteryFull, FaGaugeHigh} from 'react-icons/fa6'
+import { getPayLesson} from '../../redux/apiRequest';
 import axios from 'axios';
 
 export const Course = () => {
@@ -20,9 +21,18 @@ export const Course = () => {
     // Lọc ra các bài học có cùng id với khóa học
     const lessonsForCourse = Lesson.filter(lesson => lesson.productId === courseId);
     // Lấy 1 khóa học
-    // useEffect(() => {
-        
-    // }, [dispatch]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Thực hiện request để lấy thông tin thanh toán từ API
+                await getPayLesson(dispatch, userId, courseId,);
+                // console.log('Lấy dữ liệu thành công');
+            } catch (err) {
+                console.log('Lỗi khi lấy dữ liệu:', err);
+            }
+        }
+        fetchData();
+    }, [dispatch]);
     // Hàm thanh toán
     const handlePayment = async (e) => {
         e.preventDefault();
@@ -40,24 +50,19 @@ export const Course = () => {
         fetchData();
     }
     // console.log(lessonsForCourse)
-    const IdCourses = useSelector((state) => state.userCourse.userCourse)?.id;
-    // let lastCompletedLesson = null;
-    // if (listCourses) {
-    //     // Duyệt mảng từ cuối về đầu
-    //     for (let i = listCourses.lesson.length - 1; i >= 0; i--) {
-    //         if (listCourses.lesson[i].complete === 'true') {
-    //             lastCompletedLesson = listCourses.lesson[i].id;
-    //             break; // Kết thúc vòng lặp khi tìm thấy phần tử thỏa mãn điều kiện
-    //         }
-    //     }
-    // } else {
-    //     console.log('No courses available');
-    // }
-    // console.log(lastCompletedLesson);
-  return (
+    // const listPayLesson = useSelector((state) => state.userCourse.userCourse)?.id;
+    
+    const listPayLesson = useSelector((state) => state.userCourse.listPayCourse); // Lấy các bài học đã mua
+    const firsSuccessOne = listPayLesson.find(item => item.success === 0);
+    const lastSuccessId = firsSuccessOne?.productid;
+    const lessonId = firsSuccessOne?.lessionId;
+    // console.log(lastSuccessId)
+
+    return (
     <>
-        {IdCourses && courseId === IdCourses ? (
-            <Navigate to={`/course/lesson/` + lastCompletedLesson} />
+        {lastSuccessId && courseId === lastSuccessId ? (
+      // Dùng lastSuccessId hoặc lastCompletedLesson tùy vào điều kiện
+            <Navigate to={`/course/lesson/` + (lessonId || lastCompletedLesson)} />
         ) : (
             <div className='flex mt-6 px-11 lg:mx-[-12px] md:mx-[-8px] md:flex-wrap sm:px-0'>  
                 <div className='lg:w-2/3 lg:block px-4 flex flex-col sm:px-0'>

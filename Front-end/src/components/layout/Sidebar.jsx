@@ -31,7 +31,7 @@ export const Sidebar = () => {
   return (
     <>
         <div className='flex items-center flex-col px-2 sticky top-[74px] z-[8] w-[96px]'>
-            <div>
+            {/* <div>
                 <div className="group flex justify-center items-center w-[44px] h-[44px] mt-2 mb-0.5 rounded-full bg-[#1473e6] border-[#1473e6] cursor-pointer" ref={imgRef} onClick={() => { toggleClass(); setOpen(!open); }} >
                     <FaPlus className={`text-[#fff] transition-transform duration-300 ease-in-out group-hover:scale-150 ${open ? 'transform rotate-45 scale-150 transition-transform duration-300 ease-in-out' : ''}`} />
                 </div>
@@ -44,10 +44,10 @@ export const Sidebar = () => {
                             </ul>
                         </div>
                     } 
-            </div>
+            </div> */}
             <ul className='my-2.5'>
                 <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to="/"><FaHouse className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Trang chủ</span></NavLink></li> 
-                <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to={role === 'teach' ? "/library" : "/path"}>
+                <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to={role === 'teach' ? "/library" : "/learningpath"}>
                     {role === 'teach' ? <IoLibrary className='w-5 h-5 text-[#404040]' /> : <FaRoad className='w-5 h-5 text-[#404040]' />}
                     <span className='text-[11px] font-semibold mt-1 text-[#404040]'>{role === 'teach' ? 'Khóa Học' : 'Lộ trình'}</span></NavLink></li>
                 <li><NavLink className='flex items-center justify-center rounded-2xl flex-col h-[72px] w-[72px] mt-1 hover:bg-[#f5f5f5]' to='/chat'><FaRocketchat className='w-5 h-5 text-[#404040]'/><span className='text-[11px] font-semibold mt-1 text-[#404040]'>Chat</span></NavLink></li>

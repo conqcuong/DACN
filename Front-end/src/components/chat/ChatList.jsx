@@ -2,6 +2,7 @@ import React, { useEffect, useState  } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector} from 'react-redux'
 import {getPayMent} from '../../redux/apiRequest'
+// import { ChatContent } from './ChatContent'
 
 export const ChatList = ({ setSelectedItem }) => {
     const user = useSelector((state) => state.auth.login.currentUser); // Thông tin User
@@ -62,6 +63,7 @@ export const ChatList = ({ setSelectedItem }) => {
                 }
             </div>
         </div>
+        {/* <ChatContent chatId={setSelectedItem} /> */}
     </>
   )
 }

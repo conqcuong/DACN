@@ -19,6 +19,12 @@ export const Header = () => {
           try {
             await getAllCourses(dispatch);
             await getAllLessons(dispatch);
+            const response = await fetch("http://localhost:8999/product/getall");
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            const data = await response.json();
+            setFilterData(data);
             if (token !== null && typeof token === 'string' && token !== '') {
                 await profileUser(token, dispatch);
             } else {
@@ -38,14 +44,14 @@ export const Header = () => {
     const [inputValue, setInputValue] = useState("");
     const [filterData, setFilterData] = useState([]);
     const [showSearchResults, setShowSearchResults] = useState(false);
-    useEffect(() => {
-        fetch("http://localhost:8999/product/getall")
-        .then((res) => res.json())
-        .then((data) => {
-            setFilterData(data);
-        })
-        .catch((err) => console.log());
-    }, []);
+    // useEffect(() => {
+    //     fetch("http://localhost:8999/product/getall")
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //         setFilterData(data);
+    //     })
+    //     .catch((err) => console.log());
+    // }, []);
     const handleFilter = (e) => {
         const value = e.target.value.toLowerCase();
         const filteredData = filterData.filter((item) =>
