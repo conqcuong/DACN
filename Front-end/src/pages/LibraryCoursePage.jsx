@@ -20,6 +20,7 @@ export const LibraryCoursePage = () => {
                         <h1 className='text-#242424 text-[28px] font-black lg:my-[18.760px]'>Thư viện khóa học</h1>
                         <div className='break-words text-[#292929] text-15px max-w-[840px]'><p className='mt-1.5 mb-5'>Đây là tất cả các khóa học trên trang web của bạn.</p></div>
                         <Link to='/course/create'><button className='text-white font-semibold text-whit bg-primary-color rounded-[99px] py-2 px-5 inline-block'>Tạo khóa học</button></Link>
+                        {/* <Link  to='/course/stream/create'><button className='text-white font-semibold text-whit bg-primary-color rounded-[99px] py-2 px-5 inline-block ml-7'>Tạo khóa học Trực tuyến</button></Link> */}
                     </div>
                     <div>
                         <LibraryCourse />

@@ -3,6 +3,9 @@ import { Header } from '../components/layout/Header'
 import { Footer } from '../components/layout/Footer'
 import { Sidebar } from '../components/layout/Sidebar'
 import img_card from '../assets/imgs/fb-group-cards.png'
+import front_card from '../assets/imgs/front-template.png'
+import back_card from '../assets/imgs/back-template.png'
+import { Link } from 'react-router-dom'
 
 export const LearningpathPage = () => {
   return (
@@ -30,47 +33,47 @@ export const LearningpathPage = () => {
                                             </p>
                                         </div>
                                         <div className='learningPathItem_thumb-wrap'>
-                                            <a href="/"><img src={img_card} alt="" /></a>
+                                            <Link ><img src={front_card} alt="" /></Link>
                                         </div>
                                     </div>
                                     <div className='learningPathItem_cta'>
                                         <div className="circular-wrapper">
                                             <div className="circularProgressBar_shadow"></div>
                                             <div className="circularProgressBar_body">
-                                                <a href="/learning/lessons-for-newbie" >
+                                                <Link>
                                                     <img src="/src/assets/img/users/avt.jpg" alt="" />
-                                                </a>
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <a className='common_btn btn_primary' href="/">Xem chi tiết</a>
+                                        <Link className='common_btn btn_primary'>Xem chi tiết</Link>
                                     </div>
                                 </div>
                                 <div className='learningPathItem_wrapper'>
                                     <div className='learningPathItem_body'>
                                         <div className='learningPathItem_info'>
-                                            <h2 className='learningPathItem_title'><a href="/">Lộ trình học Front-end</a></h2>
+                                            <h2 className='learningPathItem_title'><Link>Lộ trình học Back-end</Link></h2>
                                             <p className='learningPathItem_desc'>
-                                                Lập trình viên Front-end là người xây dựng ra giao diện websites. Trong phần này F8 sẽ chia sẻ cho bạn lộ trình để trở thành lập trình viên Front-end nhé.
+                                                Trái với Front-end thì lập trình viên Back-end là người làm việc với dữ liệu, công việc thường nặng tính logic hơn. Chúng ta sẽ cùng tìm hiểu thêm về lộ trình học Back-end nhé.
                                             </p>
                                         </div>
                                         <div className='learningPathItem_thumb-wrap'>
-                                            <a href="/"><img src="/src/assets/img/learPath/learn_fe.png" alt="" /></a>
+                                            <Link><img src={back_card} alt="" /></Link>
                                         </div>
                                     </div>
                                     <div className='learningPathItem_cta'>
                                         <div className="circular-wrapper">
                                             <div className="circularProgressBar_shadow"></div>
                                             <div className="circularProgressBar_body">
-                                                <a href="/src/assets/img/learning/lessons-for-newbie" >
+                                                <Link >
                                                     <img src="/src/assets/img/users/avt.jpg" alt="" />
-                                                </a>
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <a className='common_btn btn_primary' href="/">Xem chi tiết</a>
+                                        <Link className='common_btn btn_primary'>Xem chi tiết</Link>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +81,7 @@ export const LearningpathPage = () => {
                                 <div className='suggestionBox_info'>
                                     <h2>Tham gia cộng đồng học viên F8 trên Facebook</h2>
                                     <p>Hàng nghìn người khác đang học lộ trình giống như bạn. Hãy tham gia hỏi đáp, chia sẻ và hỗ trợ nhau trong quá trình học nhé.</p>
-                                    <a className='info_btn' href="/">Tham gia nhóm</a>
+                                    <Link className='info_btn'>Tham gia nhóm</Link>
                                 </div>
                                 <div className='suggestionBox_image'>
                                     <img src={img_card} alt="" />

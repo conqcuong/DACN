@@ -18,6 +18,10 @@ import { User } from "./components/admin/User";
 import { QuizPage } from "./pages/QuizPage";
 import { VideoLivePage } from "./pages/VideoLivePage";
 import { LearningpathPage } from "./pages/LearningpathPage";
+import { OrderHistoryPage } from "./pages/OrderHistoryPage";
+import { EditCoursePage } from "./pages/EditCoursePage";
+import { Order } from "./components/admin/Order";
+import { CreateCourseStream } from "./pages/CreateCourseStream";
 
 export {
     Login,
@@ -38,6 +42,10 @@ export {
     User,
     QuizPage,
     VideoLivePage,
-    LearningpathPage
+    LearningpathPage,
+    OrderHistoryPage,
+    EditCoursePage,
+    Order,
     // Product
+    CreateCourseStream
 }

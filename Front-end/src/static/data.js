@@ -1,25 +1,25 @@
 // Header - NavList
 export const navlist = [
     {
-      text: "Trang cá nhân",
-      path: "/",
+      text: "Thông tin cá nhân",
+      path: "/editprofile",
     },
     {
-      text: "Viết Blog",
-      path: "/",
+      text: "Lịch sử giao dịch",
+      path: "/orderhistory",
     },
-    {
-      text: "Bài viết của tôi",
-      path: "/",
-    },
-    {
-      text: "Bài viết đã lưu",
-      path: "/",
-    },
-    {
-      text: "Cài đặt",
-      path: "/",
-    },
+    // {
+    //   text: "Bài viết của tôi",
+    //   path: "/",
+    // },
+    // {
+    //   text: "Bài viết đã lưu",
+    //   path: "/",
+    // },
+    // {
+    //   text: "Cài đặt",
+    //   path: "/",
+    // },
   ]
 
  //Footer

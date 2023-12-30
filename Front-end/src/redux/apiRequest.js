@@ -48,7 +48,7 @@ import {
 export const loginUser = async(user, dispatch, showToast, navigate) =>{
     dispatch(tokenStart());
     try{
-        const res = await axios.post("http://localhost:9006/Account/authenticate", user)
+        const res = await axios.post("http://localhost:9000/Account/authenticate", user)
         dispatch(tokenSuccess(res.data));
         showToast('Login successful.', 'success');
         navigate("/")
@@ -79,7 +79,7 @@ export const profileUser = async (token, dispatch) => {
 export const resgiterUser = async (formData, dispatch, navigate, showToast) =>{
     dispatch(resgiterStart());
     try{
-        const response = await fetch('http://localhost:9000/Account/Create', {
+        const response = await fetch('http://localhost:9000/Account/RegisterUser', {
             method: 'POST',
             body: formData,
         });
@@ -92,6 +92,7 @@ export const resgiterUser = async (formData, dispatch, navigate, showToast) =>{
         showToast('Resgiter successful.', 'success');
     }catch(err){
         dispatch(resgiterFailed());
+        console.log(err);
         showToast('Duplicate gmail account!', 'error');
     }
 };
@@ -134,7 +135,7 @@ export const getAllUsers = async (dispatch) => {
 export const getAllCourses = async (dispatch) => {
     dispatch(getAllCoursesStart());
     try {
-        const res = await axios.get("http://localhost:8999/product/getall");
+        const res = await axios.get("http://localhost:9000/product/getall");
         dispatch(getAllCoursesSuccess(res.data));
     } catch (err) {
         dispatch(getAllCoursesFail());
@@ -209,7 +210,7 @@ export const createLesson = async (formData, dispatch, navigate, showToast) => {
 export const getAllCmts = async (dispatch) => {
     dispatch(getAllCmtsStart());
     try {
-        const res = await axios.get("http://localhost:8888/getall");
+        const res = await axios.get("http://localhost:8888/Comment/getall");
         dispatch(getAllCmtsSuccess(res.data));
     } catch (err) {
         dispatch(getAllCmtsFail());
@@ -257,7 +258,7 @@ export const getPayMent = async (dispatch, userId) => {
 export const getPayLesson = async (dispatch, userId, courseId) => {
     dispatch(getAllPayLessonStart());
     try {
-      const response = await axios.get(`http://localhost:9001/lessionAccount/getlessionproduct/${courseId}/${userId}`);
+      const response = await axios.get(`http://localhost:9000/lessionAccount/getlessionproduct/${courseId}/${userId}`);
       const payList = response.data;
       dispatch(getAllPayLessonSuccess(payList));
     } catch (err) {

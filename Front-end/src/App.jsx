@@ -20,11 +20,17 @@ import {
     User,
     QuizPage,
     VideoLivePage,
-    LearningpathPage
+    LearningpathPage,
+    OrderHistoryPage,
+    EditCoursePage,
+    Order,
+    CreateCourseStream
     // Product,
 } from "./Routes"
 // import { TestAd } from "./test/TestAd";
 import { Test3 } from "./test/Test3";
+import { TestCourse } from "./test/TestCourse";
+import { TestLive } from "./test/TestLive";
 
 function App() {
   const userRole = useSelector((state) => state.auth.login.currentUser?.role);
@@ -38,7 +44,7 @@ function App() {
             <Route path='/dashboard' element={<DashboardPage/>}>
               <Route index element={<Home />} />
               <Route path='user' element={<User />} />
-              {/* <Route path='pay' element={<Test2 />} /> */}
+              <Route path='pay' element={<Order />} />
               {/* <Route path='product' element={<Product />} /> */}
             </Route>
             <Route path='/' element={<HomePage/>} />
@@ -52,12 +58,16 @@ function App() {
             <Route path='quiz' element={<QuizPage/>} />
             <Route path='video' element={<VideoLivePage/>} />
             <Route path='/learningpath' element={<LearningpathPage/>} />
-            <Route path='/test' element={<Test3/>} />
+            <Route path='/orderhistory' element={<OrderHistoryPage/>} />
+            <Route path='/test' element={<TestLive/>} />
+            <Route path="/course2" element={<TestCourse/>} />
             {/* Chỉ cho Admin và Teach */}
             <Route path='/library' element={userCanAccess ? <LibraryCoursePage /> : <NotFound />} />
             <Route path='/course/:id' element={ userCanAccess ? <CourseDetailPage /> : <NotFound />} />
             <Route path='/course/create' element={ userCanAccess ? <CreateCoursePage /> : <NotFound />} />
             <Route path='/course/lesson/create' element={ userCanAccess ? <CreateLessonPage /> : <NotFound />} />
+            <Route path='/course/edit/:id' element={ userCanAccess ? <EditCoursePage /> : <NotFound />} />
+            <Route path='/course/stream/create' element={ userCanAccess ? <CreateCourseStream /> : <NotFound />} />
             <Route path='*' element={<NotFound/>} />
           </Routes>
         </Router>

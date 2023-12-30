@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { FaSearch } from "react-icons/fa"
 import profile from "../../assets/imgs/user/user_img.png"
+import { useSelector } from 'react-redux'
 
 export const Header = () => {
+    const user = useSelector((state) => state.auth.login.currentUser);
+    console.log(user);
     const [open, setOpen] = useState(false)
-
     const showProfile = () => {
         // alert("helloo")
-        setOpen(!open)
+        setOpen(open)
     }
   return (
     <div className=''>
@@ -25,10 +27,9 @@ export const Header = () => {
                         <FaEnvelope />
                     </div> */}
                     <div className='flex items-center gap-[15px] relative' onClick={showProfile} >
-                        <p>Douglas McGee</p>
-                        <div className='h-[50px] w-[50px] rounded-full bg-[#4E73DF] cursor-pointer flex items-center justify-center relative z-40' >
-                            <img src={profile} alt="" />
-
+                        <p>{user.fullname}</p>
+                        <div className='h-[50px] w-[50px] rounded-full cursor-pointer flex items-center justify-center relative z-40' >
+                            <img className="w-[32.4px] h-[32.4px] object-cover rounded-full" src={user.avaterimage} alt="" />
                         </div>
 
                         {

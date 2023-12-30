@@ -4,12 +4,18 @@ import { FaLightbulb } from "react-icons/fa6";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { navlist } from "../../static/data";
-import { logOutUser, saveOutUser, getAllCourses, profileUser, getAllLessons } from "../../redux/apiRequest";
+import { logOutUser, saveOutUser, getAllCourses, profileUser, getAllLessons, getPayMent } from "../../redux/apiRequest";
 import { FaBell, FaBars, FaChevronLeft} from "react-icons/fa6";
 
 export const Header = () => {
     // Quay lại
     const currentLocation = useLocation();
+    // Get User Login
+    const user = useSelector((state) => state.auth.login.currentUser);
+    const listUser = useSelector((state) => state.userCourse.listPayCourse); // Danh sách người dùng
+    const courses = useSelector((state)=> state.course.listCourses); 
+    // const course = courses.find((course) => course.id === item.productid);
+    // console.log(user.id);
     // Lấy token để lấy dữ liễu người dùng
     const dispatch = useDispatch();
     const token = useSelector(state => state.auth.token);
@@ -19,7 +25,7 @@ export const Header = () => {
           try {
             await getAllCourses(dispatch);
             await getAllLessons(dispatch);
-            const response = await fetch("http://localhost:8999/product/getall");
+            const response = await fetch("http://localhost:9000/product/getall");
             if (!response.ok) {
                 throw new Error('Network response was not ok.');
             }
@@ -37,8 +43,19 @@ export const Header = () => {
         };
         fetchData();
       }, [dispatch, token]); 
-    // Get User Login
-    const user = useSelector((state) => state.auth.login.currentUser);
+      useEffect(() => {
+        if (user && user.id) {
+            const fetchData = async () => {
+                try {
+                    await getPayMent(dispatch, user.id)
+                } catch (err) {
+                  console.error(err);
+                  // Xử lý lỗi khi gọi các hàm
+                }
+              };
+            fetchData();
+        }
+    }, [user?.id, dispatch]); 
     // search
     const [data, setData] = useState([]);
     const [inputValue, setInputValue] = useState("");
@@ -224,13 +241,22 @@ export const Header = () => {
                                     <h6 className="text-[18px] font-semibold">Khóa học của tôi</h6>
                                 </div>
                                 <div className="max-h-[68vh] overflow-y-auto ">
-                                    <div className="flex mx-2 px-3 py-2 transition duration-300 ease-in-out hover:bg-gray-300">
-                                        <Link><img className="block text-center min-h-[67px] w-[120px] rounded-lg" src="https://files.fullstack.edu.vn/f8-prod/courses/7.png"alt=""/></Link>
-                                        <div className="ml-3 flex-1">
-                                            <h3 className="text-14px mt-1.5 font-semibold">Kiến thức nhập môn IT</h3>
-                                            <Link className="block text-14px mt-1.5 font-semibold text-primary-color">Bắt đầu học</Link>
-                                        </div>
-                                    </div>
+                                    {
+                                        listUser && listUser.map((item, index) => {
+                                            const course = courses.find((course) => course.id === item.productId);
+                                            if(course){
+                                                return(
+                                                    <div key={item.id} className="flex mx-2 px-3 py-2 transition duration-300 ease-in-out hover:bg-gray-300">
+                                                        <Link to={`/course/details/${course.id}`}><img className="block text-center min-h-[67px] w-[120px] rounded-lg" src={course.apiimage}alt=""/></Link>
+                                                        <div className="ml-3 flex-1">
+                                                            <h3 className="line-clamp-1 text-14px mt-1.5 font-semibold">{course.name}</h3>
+                                                            <Link to={`/course/details/${course.id}`} className="block text-14px mt-1.5 font-semibold text-primary-color">Bắt đầu học</Link>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    }
                                 </div>
                             </ul>
                         </div>

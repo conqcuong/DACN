@@ -22,7 +22,7 @@ export const Register = () => {
             "fullname" : username,
         };
         const formData = new FormData();
-        formData.append('file', filePath);
+        // formData.append('file', filePath);
         formData.append('data', JSON.stringify(newUser));
         try {
             resgiterUser(formData, dispatch, navigate, showToast);
@@ -54,17 +54,6 @@ export const Register = () => {
             <div className='min-w-[450px] bg-white py-10 px-10 rounded-[16px]'>
                 <h1 className='text-[28px] font-bold text-center'>Register</h1>
                 <form className='flex flex-col' onSubmit={handleRegiter}>
-                <div className="rounded-full w-15 h-15 mt-3 flex items-center justify-center">
-                        <label className="relative w-14 h-14 overflow-hidden flex items-center justify-center bg-gray-300 cursor-pointer rounded-full hover:cursor-pointer">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                                onChange={handleFileChange}
-                            />
-                            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image || user_img})` }}></div>
-                        </label>
-                    </div>
                     <div className='flex justify-between'>
                         <label className='block text-14px font-semibold my-2.5 ml-2 text-black'>Gmail:</label>
                     </div>

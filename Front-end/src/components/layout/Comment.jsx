@@ -18,9 +18,10 @@ export const Comment = () => {
   const dispatch = useDispatch();
   const cmts = useSelector((state) => state.comment.listComments);
   const filteredLessonIds = cmts.filter((item) => item.lessionid === lessonId);
+  console.log(filteredLessonIds);
   const users = useSelector((state) => state.user.listUsers);
-  console.log()
-  console.log(filterData);
+  console.log();
+  console.log(cmts);
   // console.log(users);
   useEffect(() => {
     //

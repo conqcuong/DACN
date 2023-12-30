@@ -29,7 +29,7 @@ export const ChatContent = ({ selectedItem }) => {
   useEffect(() => {
     if (selectedItem) {
       setSelectedItemContent(selectedItem);
-  
+
       // Xác định courseId từ selectedItem nếu có giá trị và chứa id
       const courseId = selectedItem.id || null;
       const courseIdFromSelectedItem = selectedItem.id || null;
@@ -41,15 +41,14 @@ export const ChatContent = ({ selectedItem }) => {
       }));
     }
   }, [selectedItem]);
-  
+
   useEffect(() => {
     if (courseId) {
-  
       const fetchComments = async () => {
         try {
           // Sử dụng courseId được xác định để fetch data
           const response = await fetch(
-            `http://localhost:9005/getall/${courseId}`
+            `http://localhost:9005/Chat/getall/${courseId}`
           );
           await getAllUsers(dispatch);
           const data = await response.json();
@@ -58,7 +57,7 @@ export const ChatContent = ({ selectedItem }) => {
           console.error("Error fetching comments:", error);
         }
       };
-  
+
       fetchComments();
       connect();
       return () => {
@@ -66,7 +65,7 @@ export const ChatContent = ({ selectedItem }) => {
       };
     }
   }, [courseId, dispatch]);
-  
+
   // const scrollToBottom = () => {
   //     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   //   };
@@ -79,7 +78,6 @@ export const ChatContent = ({ selectedItem }) => {
     let Sock = new SockJS("http://localhost:9005/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
-
   };
 
   const disconnect = () => {
@@ -102,7 +100,11 @@ export const ChatContent = ({ selectedItem }) => {
       senderName: userData.username,
       status: "JOIN",
     };
-    stompClient.send(`/app/message/${selectedItemContent}`, {}, JSON.stringify(chatMessage));
+    stompClient.send(
+      `/app/message/${selectedItemContent}`,
+      {},
+      JSON.stringify(chatMessage)
+    );
   };
 
   const onMessageReceived = (payload) => {
@@ -125,7 +127,6 @@ export const ChatContent = ({ selectedItem }) => {
     }
   };
 
-
   const onError = (err) => {
     console.log(err);
   };
@@ -145,7 +146,11 @@ export const ChatContent = ({ selectedItem }) => {
         status: "MESSAGE",
       };
       console.log(courseId + "loc");
-      stompClient.send(`/app/message/${courseId}`, {}, JSON.stringify(chatMessage));
+      stompClient.send(
+        `/app/message/${courseId}`,
+        {},
+        JSON.stringify(chatMessage)
+      );
       setUserData({ ...userData, message: "" });
     }
   };
@@ -184,10 +189,11 @@ export const ChatContent = ({ selectedItem }) => {
                         return (
                           <div
                             key={item.id}
-                            className={`chat__item ${item.senderName === userData.username
-                              ? "self"
-                              : "other"
-                              }`}
+                            className={`chat__item ${
+                              item.senderName === userData.username
+                                ? "self"
+                                : "other"
+                            }`}
                           >
                             <div className="chat__item__content">
                               <div className="text-11px font-semibold user__name">
